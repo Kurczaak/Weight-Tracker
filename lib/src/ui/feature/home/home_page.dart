@@ -32,19 +32,14 @@ class HomePage extends ConsumerWidget {
     required BuildContext context,
     required WeightRecord? weightRecord,
     required void Function(WeightRecord record) onSaved,
-  }) {
-    showDialog(
-      context: context,
-      builder: (context) => WeightPickerDialog(
-        initialRecord: weightRecord?.copyWith(date: DateTime.now()),
-        onSaved: onSaved,
-      ),
-    );
-  }
-}
-
-class _AddWeightDialog {
-  //implement add weight dialog
+  }) =>
+      showDialog<void>(
+        context: context,
+        builder: (context) => WeightPickerDialog(
+          initialRecord: weightRecord?.copyWith(date: DateTime.now()),
+          onSaved: onSaved,
+        ),
+      );
 }
 
 class _HomePageBody extends StatelessWidget {
