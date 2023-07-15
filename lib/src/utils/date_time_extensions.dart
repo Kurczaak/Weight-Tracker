@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
 
 extension DateTimeExtensions on DateTime {
+  DateFormat get dayMonthYear => DateFormat('dd.MM.yyyy');
+
   String toFormattedString() {
-    return DateFormat.yMMMMEEEEd().format(this);
+    return dayMonthYear.format(this);
   }
 }
