@@ -1,13 +1,27 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/ui/feature/home/home_page.dart';
+import 'package:simple_weight_tracker/src/ui/feature/home/notifier/weight_tracker_notifier.dart';
 
-import 'src/ui/feature/home_page.dart';
+// TODO refactor to use a repository
+final weightProvider = StateProvider((ref) => <WeightRecord>[]);
+
+// TODO refactor
+final weightTrackerNotifierProvider =
+    StateNotifierProvider<WeightTrackerNotifier, List<WeightRecord>>((ref) {
+  final weightRepository = ref.watch(weightProvider);
+  return WeightTrackerNotifier.fromState(weightRepository);
+});
 
 void main() => runApp(
-      DevicePreview(
-        enabled: !kReleaseMode && kIsWeb,
-        builder: (context) => const MyApp(), // Wrap your app
+      ProviderScope(
+        child: DevicePreview(
+          enabled: !kReleaseMode && kIsWeb,
+          builder: (context) => const MyApp(), // Wrap your app
+        ),
       ),
     );
 
