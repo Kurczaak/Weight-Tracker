@@ -33,6 +33,8 @@ dependencies:
   # Json
   json_annotation: ^4.8.1
   json_serializable: ^6.7.1
+  freezed: ^2.4.1
+  freezed_annotation: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -41,7 +43,6 @@ dev_dependencies:
   auto_route_generator: ^7.2.0
   build_runner: ^2.4.6
   intl: ^0.18.0
-  freezed_annotation: ^2.2.0
   very_good_analysis: ^5.0.0+1
   riverpod_generator: ^2.2.3
 
