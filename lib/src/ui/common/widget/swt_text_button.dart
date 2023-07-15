@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SWTTextButton extends StatelessWidget {
-  const SWTTextButton({
-    required this.title,
+  const SWTTextButton(
+    this.title, {
     required this.onPressed,
     super.key,
   });
