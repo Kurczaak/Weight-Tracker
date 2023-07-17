@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
-import 'package:simple_weight_tracker/src/ui/feature/home/home_page.dart';
-import 'package:simple_weight_tracker/src/ui/feature/home/notifier/weight_tracker_notifier.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/home_page.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
 
 // TODO refactor to use a repository
 final weightProvider = StateProvider((ref) => <WeightRecord>[]);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
-import 'package:simple_weight_tracker/src/ui/common/widget/swt_text_button.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/swt_text_button.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 import 'package:simple_weight_tracker/src/utils/double_extensions.dart';
 

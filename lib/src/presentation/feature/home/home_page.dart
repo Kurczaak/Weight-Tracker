@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/main.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
-import 'package:simple_weight_tracker/src/ui/feature/home/widget/weight_picker_dialog.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -10,7 +10,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(weightTrackerNotifierProvider);
-    final notifier = ref.read(weightTrackerNotifierProvider.notifier);
+    final notifier = ref.watch(weightTrackerNotifierProvider.notifier);
     return Scaffold(
       body: _HomePageBody(
         currentRecord: state.lastOrNull,
@@ -168,6 +168,6 @@ class _RecordsList extends ConsumerWidget {
   }
 
   void _onPressed(WeightRecord record, WidgetRef ref) {
-    ref.read(weightTrackerNotifierProvider.notifier).removeRecord(record);
+    ref.watch(weightTrackerNotifierProvider.notifier).removeRecord(record);
   }
 }
