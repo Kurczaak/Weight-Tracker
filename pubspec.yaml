@@ -38,6 +38,7 @@ dependencies:
   freezed: ^2.4.1
   freezed_annotation: ^2.4.1
   numberpicker: ^2.1.2
+  path_provider: ^2.0.15
 
 dev_dependencies:
   flutter_test:
