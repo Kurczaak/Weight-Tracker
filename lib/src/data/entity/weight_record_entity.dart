@@ -5,9 +5,13 @@ part 'weight_record_entity.g.dart';
 
 @collection
 class WeightRecordEntity {
-  WeightRecordEntity(this.weight, this.date);
+  WeightRecordEntity({
+    required this.weight,
+    required this.date,
+    required this.id,
+  });
 
-  Id id = Isar.autoIncrement;
+  Id? id;
 
   final double weight;
   @Index(
