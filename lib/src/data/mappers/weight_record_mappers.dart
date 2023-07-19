@@ -16,3 +16,7 @@ extension WeightRecordEntityMappers on WeightRecordEntity {
         id: id,
       );
 }
+
+extension WeightRecordEntityListMappers on List<WeightRecordEntity> {
+  List<WeightRecord> toModelList() => map((e) => e.toModel()).toList();
+}
