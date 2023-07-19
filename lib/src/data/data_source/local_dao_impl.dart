@@ -14,8 +14,11 @@ class LocalDaoImpl implements LocalDao {
       });
 
   @override
-  Future<void> deleteWeight(WeightRecordEntity weight) =>
-      isar.writeTxn(() => isar.weightRecordEntitys.delete(weight.id));
+  Future<void> deleteWeight(WeightRecordEntity weight) => isar.writeTxn(
+        () => weight.id != null
+            ? isar.weightRecordEntitys.delete(weight.id!)
+            : isar.weightRecordEntitys.deleteByDate(weight.date),
+      );
 
   @override
   Future<List<WeightRecordEntity>> getAllWeights() =>
