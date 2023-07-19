@@ -21,10 +21,6 @@ class LocalDaoImpl implements LocalDao {
       );
 
   @override
-  Future<List<WeightRecordEntity>> getAllWeights() =>
-      isar.weightRecordEntitys.where().sortByDateDesc().findAll();
-
-  @override
   Future<List<WeightRecordEntity>> getWeightsBetweenDates({
     int? pageNumber,
     int? pageSize,
@@ -62,4 +58,11 @@ class LocalDaoImpl implements LocalDao {
   @override
   Future<void> updateWeight(WeightRecordEntity weight) =>
       isar.writeTxn(() => isar.weightRecordEntitys.put(weight));
+
+  @override
+  Future<WeightRecordEntity?> getFirstWeightRecord() =>
+      isar.weightRecordEntitys.where().sortByDateDesc().findFirst();
+  @override
+  Future<WeightRecordEntity?> getLastWeightRecord() =>
+      isar.weightRecordEntitys.where().sortByDate().findFirst();
 }

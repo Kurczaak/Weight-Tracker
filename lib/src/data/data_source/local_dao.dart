@@ -2,7 +2,8 @@ import 'package:simple_weight_tracker/src/data/entity/weight_record_entity.dart'
 
 abstract class LocalDao {
   Future<void> init();
-  Future<List<WeightRecordEntity>> getAllWeights();
+  Future<WeightRecordEntity?> getFirstWeightRecord();
+  Future<WeightRecordEntity?> getLastWeightRecord();
   Future<List<WeightRecordEntity>> getWeightsBetweenDates({
     int? pageNumber,
     int? pageSize,
