@@ -7,5 +7,6 @@ class WeightRecord with _$WeightRecord {
   const factory WeightRecord({
     required double weight,
     required DateTime date,
+    int? id,
   }) = _WeightRecord;
 }
