@@ -42,4 +42,29 @@ class IsarWeightRepositoryImpl implements WeightRepository {
 
   @override
   Future<void> init() => _localDao.init();
+
+  @override
+  Stream<WeightRecord?> watchFirstWeightRecord() =>
+      _localDao.watchFirstWeightRecord().map((event) => event?.toModel());
+
+  @override
+  Stream<WeightRecord?> watchLastWeightRecord() =>
+      _localDao.watchLastWeightRecord().map((event) => event?.toModel());
+
+  @override
+  Stream<List<WeightRecord>> watchWeightsBetweenDates({
+    DateTime? fromDate,
+    DateTime? toDate,
+    DataPaginator? dataPaginator,
+  }) =>
+      _localDao
+          .watchWeightsBetweenDates(
+            fromDate: fromDate,
+            toDate: toDate,
+            pageNumber: dataPaginator?.pageNumber,
+            pageSize: dataPaginator?.pageSize,
+          )
+          .map(
+            (event) => event.toModelList(),
+          );
 }
