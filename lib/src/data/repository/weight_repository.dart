@@ -13,7 +13,7 @@ abstract class WeightRepository {
   Future<void> deleteWeight(WeightRecord weight);
   Stream<WeightRecord?> watchFirstWeightRecord();
   Stream<WeightRecord?> watchLastWeightRecord();
-  Stream<List<WeightRecord>> watchWeightsBetweenDates({
+  Stream<List<WeightRecord>> watchWeights({
     DateTime? fromDate,
     DateTime? toDate,
     DataPaginator? dataPaginator,

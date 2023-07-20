@@ -10,7 +10,7 @@ abstract class LocalDao {
     DateTime? fromDate,
     DateTime? toDate,
   });
-  Stream<List<WeightRecordEntity>> watchWeightsBetweenDates({
+  Stream<List<WeightRecordEntity>> watchWeights({
     int? pageNumber,
     int? pageSize,
     DateTime? fromDate,

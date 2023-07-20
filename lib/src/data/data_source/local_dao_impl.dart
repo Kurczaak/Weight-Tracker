@@ -73,7 +73,7 @@ class LocalDaoImpl implements LocalDao {
           .map((event) => event.first);
 
   @override
-  Stream<List<WeightRecordEntity>> watchWeightsBetweenDates({
+  Stream<List<WeightRecordEntity>> watchWeights({
     DateTime? fromDate,
     DateTime? toDate,
     int? pageNumber,
