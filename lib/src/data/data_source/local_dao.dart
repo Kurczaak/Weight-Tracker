@@ -10,6 +10,14 @@ abstract class LocalDao {
     DateTime? fromDate,
     DateTime? toDate,
   });
+  Stream<List<WeightRecordEntity>> watchWeightsBetweenDates({
+    int? pageNumber,
+    int? pageSize,
+    DateTime? fromDate,
+    DateTime? toDate,
+  });
+  Stream<WeightRecordEntity?> watchFirstWeightRecord();
+  Stream<WeightRecordEntity?> watchLastWeightRecord();
   Future<WeightRecordEntity> addWeight(WeightRecordEntity weight);
   Future<void> updateWeight(WeightRecordEntity weight);
   Future<void> deleteWeight(WeightRecordEntity weight);

@@ -27,18 +27,8 @@ class LocalDaoImpl implements LocalDao {
     DateTime? fromDate,
     DateTime? toDate,
   }) {
-    late QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
-        dateQuery;
-    final weightsWhereQuery = isar.weightRecordEntitys.where();
-    if (fromDate != null) {
-      dateQuery = weightsWhereQuery.dateGreaterThan(fromDate);
-    }
-    if (toDate != null) {
-      dateQuery = weightsWhereQuery.dateLessThan(toDate);
-    }
-    if (fromDate != null && toDate != null) {
-      dateQuery = weightsWhereQuery.dateBetween(fromDate, toDate);
-    }
+    final dateQuery = _getWeightsDateQuery(fromDate, toDate);
+
     return dateQuery
         .sortByDateDesc()
         .offset((pageNumber ?? 0) * (pageSize ?? 0))
@@ -65,4 +55,54 @@ class LocalDaoImpl implements LocalDao {
   @override
   Future<WeightRecordEntity?> getLastWeightRecord() =>
       isar.weightRecordEntitys.where().sortByDate().findFirst();
+
+  @override
+  Stream<WeightRecordEntity?> watchFirstWeightRecord() =>
+      isar.weightRecordEntitys
+          .where()
+          .sortByDateDesc()
+          .watch(fireImmediately: true)
+          .map((event) => event.first);
+
+  @override
+  Stream<WeightRecordEntity?> watchLastWeightRecord() =>
+      isar.weightRecordEntitys
+          .where()
+          .sortByDate()
+          .watch(fireImmediately: true)
+          .map((event) => event.first);
+
+  @override
+  Stream<List<WeightRecordEntity>> watchWeightsBetweenDates({
+    DateTime? fromDate,
+    DateTime? toDate,
+    int? pageNumber,
+    int? pageSize,
+  }) {
+    final dateQuery = _getWeightsDateQuery(fromDate, toDate);
+
+    return dateQuery
+        .sortByDateDesc()
+        .offset((pageNumber ?? 0) * (pageSize ?? 0))
+        .limit(pageSize ?? 0)
+        .watch(fireImmediately: true)
+        .map((event) => event.toList());
+  }
+
+  QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
+      _getWeightsDateQuery(DateTime? fromDate, DateTime? toDate) {
+    late QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
+        dateQuery;
+    final weightsWhereQuery = isar.weightRecordEntitys.where();
+    if (fromDate != null) {
+      dateQuery = weightsWhereQuery.dateGreaterThan(fromDate);
+    }
+    if (toDate != null) {
+      dateQuery = weightsWhereQuery.dateLessThan(toDate);
+    }
+    if (fromDate != null && toDate != null) {
+      dateQuery = weightsWhereQuery.dateBetween(fromDate, toDate);
+    }
+    return dateQuery;
+  }
 }
