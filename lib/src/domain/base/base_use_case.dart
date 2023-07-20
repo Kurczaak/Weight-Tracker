@@ -15,7 +15,7 @@ abstract class UseCase<Type, Params> {
   }
 }
 
-abstract class UseCaseNoParam extends UseCase<Type, void> {
+abstract class UseCaseNoParam<Type> extends UseCase<Type, void> {
   @override
-  Future<Type> execute(void param);
+  Future<Either<Failure, Type>> call([void params]) => super.call(params);
 }
