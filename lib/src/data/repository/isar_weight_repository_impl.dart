@@ -1,6 +1,7 @@
 import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/mappers/weight_record_mappers.dart';
 import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart';
+import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 
 class IsarWeightRepositoryImpl implements WeightRepository {
@@ -9,8 +10,8 @@ class IsarWeightRepositoryImpl implements WeightRepository {
   final LocalDao _localDao;
 
   @override
-  Future<void> addWeight(WeightRecord weight) =>
-      _localDao.addWeight(weight.toEntity());
+  Future<WeightRecord> addWeight(WeightRecord weight) =>
+      _localDao.addWeight(weight.toEntity()).then((value) => value.toModel());
 
   @override
   Future<void> deleteWeight(WeightRecord weight) => _localDao.deleteWeight(
@@ -18,9 +19,21 @@ class IsarWeightRepositoryImpl implements WeightRepository {
       );
 
   @override
-  Future<List<WeightRecord>> getWeights() => _localDao.getAllWeights().then(
-        (value) => value.toModelList(),
-      );
+  Future<List<WeightRecord>> getWeights({
+    DateTime? fromDate,
+    DateTime? toDate,
+    DataPaginator? dataPaginator,
+  }) =>
+      _localDao
+          .getWeightsBetweenDates(
+            fromDate: fromDate,
+            toDate: toDate,
+            pageNumber: dataPaginator?.pageNumber,
+            pageSize: dataPaginator?.pageSize,
+          )
+          .then(
+            (value) => value.toModelList(),
+          );
 
   @override
   Future<void> updateWeight(WeightRecord weight) => _localDao.updateWeight(
