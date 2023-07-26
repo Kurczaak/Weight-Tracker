@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:simple_weight_tracker/main.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
 
 class HomePage extends ConsumerWidget {
@@ -13,14 +13,14 @@ class HomePage extends ConsumerWidget {
     final notifier = ref.watch(weightTrackerNotifierProvider.notifier);
     return Scaffold(
       body: _HomePageBody(
-        currentRecord: state.lastOrNull,
-        firstRecord: state.firstOrNull,
+        currentRecord: state.firstOrNull,
+        firstRecord: state.lastOrNull,
         goalWeight: 80,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _onFloatingActionButtonPressed(
           context: context,
-          weightRecord: state.lastOrNull,
+          weightRecord: state.firstOrNull,
           onSaved: notifier.addRecord,
         ),
         child: const Icon(Icons.add),
