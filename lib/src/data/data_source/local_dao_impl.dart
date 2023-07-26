@@ -1,10 +1,13 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
+import 'package:simple_weight_tracker/src/data/data_source/local_dao_consts.dart';
 import 'package:simple_weight_tracker/src/data/entity/weight_record_entity.dart';
 
 class LocalDaoImpl implements LocalDao {
-  late Isar isar;
+  LocalDaoImpl(this.isar);
+
+  final Isar isar;
 
   @override
   Future<WeightRecordEntity> addWeight(WeightRecordEntity weight) =>
@@ -37,12 +40,18 @@ class LocalDaoImpl implements LocalDao {
   }
 
   @override
-  Future<void> init() async {
+  Future<LocalDao> init() async {
+    // no-op
+    return this;
+  }
+
+  static Future<LocalDao> withIsarDB() async {
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open(
+    final isar = await Isar.open(
       [WeightRecordEntitySchema],
       directory: dir.path,
     );
+    return LocalDaoImpl(isar);
   }
 
   @override
@@ -84,14 +93,13 @@ class LocalDaoImpl implements LocalDao {
     return dateQuery
         .sortByDateDesc()
         .offset((pageNumber ?? 0) * (pageSize ?? 0))
-        .limit(pageSize ?? 0)
-        .watch(fireImmediately: true)
-        .map((event) => event.toList());
+        .limit(pageSize ?? LocalDaoConsts.maxRecordsCount)
+        .watch(fireImmediately: true);
   }
 
   QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
       _getWeightsDateQuery(DateTime? fromDate, DateTime? toDate) {
-    late QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
+    QueryBuilder<WeightRecordEntity, WeightRecordEntity, QAfterWhereClause>
         dateQuery;
     final weightsWhereQuery = isar.weightRecordEntitys.where();
     if (fromDate != null) {
@@ -102,6 +110,8 @@ class LocalDaoImpl implements LocalDao {
     }
     if (fromDate != null && toDate != null) {
       dateQuery = weightsWhereQuery.dateBetween(fromDate, toDate);
+    } else {
+      dateQuery = weightsWhereQuery.dateGreaterThan(DateTime(2023));
     }
     return dateQuery;
   }
