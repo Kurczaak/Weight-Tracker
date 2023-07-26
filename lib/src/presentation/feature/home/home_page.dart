@@ -10,17 +10,18 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(weightTrackerNotifierProvider);
-    final notifier = ref.watch(weightTrackerNotifierProvider.notifier);
+    final notifier = ref.watch(weightTrackerNotifierProvider.notifier)
+      ..initWatchWeights(5);
     return Scaffold(
       body: _HomePageBody(
-        currentRecord: state.firstOrNull,
-        firstRecord: state.lastOrNull,
+        currentRecord: state.latestWeight,
+        firstRecord: state.initialWeight,
         goalWeight: 80,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _onFloatingActionButtonPressed(
           context: context,
-          weightRecord: state.firstOrNull,
+          weightRecord: state.latestWeight,
           onSaved: notifier.addRecord,
         ),
         child: const Icon(Icons.add),
@@ -150,11 +151,11 @@ class _RecordsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final records = ref.watch(weightTrackerNotifierProvider);
+    final state = ref.watch(weightTrackerNotifierProvider);
     return ListView.builder(
-      itemCount: records.length,
+      itemCount: state.records.length,
       itemBuilder: (context, index) {
-        final record = records[index];
+        final record = state.records[index];
         return ListTile(
           title: Text(record.weight.toString()),
           subtitle: Text(record.date.toString()),
