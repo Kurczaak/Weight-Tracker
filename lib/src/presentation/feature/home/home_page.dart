@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -11,7 +12,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(weightTrackerNotifierProvider);
     final notifier = ref.watch(weightTrackerNotifierProvider.notifier)
-      ..initWatchWeights(5);
+      ..initWatchWeights(AppConsts.homePageRecordsCount);
     return Scaffold(
       body: _HomePageBody(
         currentRecord: state.latestWeight,
