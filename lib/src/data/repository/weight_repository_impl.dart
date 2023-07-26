@@ -4,8 +4,8 @@ import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 
-class IsarWeightRepositoryImpl implements WeightRepository {
-  IsarWeightRepositoryImpl(this._localDao);
+class WeightRepositoryImpl implements WeightRepository {
+  WeightRepositoryImpl(this._localDao);
 
   final LocalDao _localDao;
 
