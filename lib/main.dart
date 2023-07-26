@@ -2,28 +2,25 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/data/data_source/local_dao_impl.dart';
+import 'package:simple_weight_tracker/src/data/providers/local_dao_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/home_page.dart';
-import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
 
-// TODO refactor to use a repository
-final weightProvider = StateProvider((ref) => <WeightRecord>[]);
-
-// TODO refactor
-final weightTrackerNotifierProvider =
-    StateNotifierProvider<WeightTrackerNotifier, List<WeightRecord>>((ref) {
-  final weightRepository = ref.watch(weightProvider);
-  return WeightTrackerNotifier.fromState(weightRepository);
-});
-
-void main() => runApp(
-      ProviderScope(
-        child: DevicePreview(
-          enabled: !kReleaseMode && kIsWeb,
-          builder: (context) => const MyApp(), // Wrap your app
-        ),
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final localDao = await LocalDaoImpl.withIsarDB();
+  runApp(
+    ProviderScope(
+      overrides: [
+        localDaoProvider.overrideWithValue(localDao),
+      ],
+      child: DevicePreview(
+        enabled: !kReleaseMode && kIsWeb,
+        builder: (context) => const MyApp(),
       ),
-    );
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
