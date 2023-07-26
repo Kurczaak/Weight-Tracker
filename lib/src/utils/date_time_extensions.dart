@@ -6,4 +6,6 @@ extension DateTimeExtensions on DateTime {
   String toFormattedString() {
     return dayMonthYear.format(this);
   }
+
+  DateTime get startOfDay => DateTime(year, month, day);
 }
