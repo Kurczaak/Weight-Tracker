@@ -69,17 +69,17 @@ class LocalDaoImpl implements LocalDao {
   Stream<WeightRecordEntity?> watchFirstWeightRecord() =>
       isar.weightRecordEntitys
           .where()
-          .sortByDateDesc()
+          .sortByDate()
           .watch(fireImmediately: true)
-          .map((event) => event.first);
+          .map((event) => event.isNotEmpty ? event.first : null);
 
   @override
   Stream<WeightRecordEntity?> watchLastWeightRecord() =>
       isar.weightRecordEntitys
           .where()
-          .sortByDate()
+          .sortByDateDesc()
           .watch(fireImmediately: true)
-          .map((event) => event.first);
+          .map((event) => event.isNotEmpty ? event.first : null);
 
   @override
   Stream<List<WeightRecordEntity>> watchWeights({
