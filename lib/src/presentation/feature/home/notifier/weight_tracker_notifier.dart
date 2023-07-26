@@ -5,6 +5,7 @@ import 'package:simple_weight_tracker/src/domain/model/weight_record_data_pagina
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_state.dart';
+import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
 final weightTrackerNotifierProvider =
     StateNotifierProvider<WeightTrackerNotifier, WeightTrackerState>((ref) {
@@ -30,30 +31,23 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
     required this.watchWeightRecordsUseCase,
     required this.deleteWeightRecordUseCase,
     required this.watchInitialWeightUseCase,
-  }) : super(const WeightTrackerState()) {
-    _watchWeights();
-  }
-
-  static const _pageSize = 10;
+  }) : super(const WeightTrackerState());
 
   final SaveWeightRecordUseCase saveWeightRecordUseCase;
   final WatchWeightRecordsUseCase watchWeightRecordsUseCase;
   final DeleteWeightRecordUseCase deleteWeightRecordUseCase;
   final WatchInitialWeightUseCase watchInitialWeightUseCase;
 
-  Future<void> addRecord(WeightRecord record) =>
-      saveWeightRecordUseCase(record.copyWith(id: null));
-
-  Future<void> updateRecord(WeightRecord record) =>
-      saveWeightRecordUseCase(record.copyWith());
+  Future<void> addRecord(WeightRecord record) => saveWeightRecordUseCase
+      .call(record.copyWith(date: record.date.startOfDay, id: null));
 
   void removeRecord(WeightRecord record) =>
       deleteWeightRecordUseCase.call(record);
 
-  Future<void> _watchWeights() async {
+  Future<void> initWatchWeights(int recordsCount) async {
     final latestRecords = await watchWeightRecordsUseCase(
-      const WeightRecordDataPaginator(
-        dataPaginator: DataPaginator(pageNumber: 0, pageSize: _pageSize),
+      WeightRecordDataPaginator(
+        dataPaginator: DataPaginator(pageNumber: 0, pageSize: recordsCount),
       ),
     );
 
@@ -77,7 +71,7 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
       (r) => r.listen((event) {
         state = state.copyWith(
           records: event,
-          latestWeight: event.first,
+          latestWeight: event.isNotEmpty ? event.first : null,
         );
       }),
     );
