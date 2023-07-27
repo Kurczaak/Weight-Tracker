@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao_impl.dart';
 import 'package:simple_weight_tracker/src/data/providers/local_dao_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/home_page.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppThemes.darkTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: ThemeMode.dark,
       home: const HomePage(),
     );
   }
