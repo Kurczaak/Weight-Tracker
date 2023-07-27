@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/period_selector.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/weight_chart.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -20,6 +26,7 @@ class HomePage extends ConsumerWidget {
         goalWeight: 80,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.secondaryColor,
         onPressed: () => _onFloatingActionButtonPressed(
           context: context,
           weightRecord: state.latestWeight,
@@ -57,20 +64,55 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _WeightStatusRow(
-          firstRecord: firstRecord,
-          currentRecord: currentRecord,
-          goalWeight: goalWeight,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: AppColors.backgroundGradient,
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: AppDimens.paddingLarge,
+            horizontal: AppDimens.paddingLarge,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _WeightStatusRow(
+                firstRecord: firstRecord,
+                currentRecord: currentRecord,
+                goalWeight: goalWeight,
+              ),
+              AppSpacers.h24,
+              const Expanded(child: _WeightChart()),
+              AppSpacers.h24,
+              BaseCard(
+                width: AppDimens.statusCardSize,
+                height: AppDimens.statusCardSize,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'GOOD',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium
+                              ?.copyWith(color: AppColors.positiveColor),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'status',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    AppSpacers.h24,
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-        const _WeightChart(),
-        const SizedBox(
-          height: 300,
-          child: _RecordsList(),
-        )
-      ],
+      ),
     );
   }
 }
@@ -94,13 +136,13 @@ class _WeightStatusRow extends StatelessWidget {
         _WeightStatusCell(
           title: 'Start',
           subtitle: firstRecord?.weight.toStringAsFixed(1) ?? '-',
-          isHighlighted: true,
         ),
+        AppSpacers.w12,
         _WeightStatusCell(
           title: 'Current',
           subtitle: currentRecord?.weight.toStringAsFixed(1) ?? '-',
-          isHighlighted: true,
         ),
+        AppSpacers.w12,
         _WeightStatusCell(
           title: 'Goal',
           subtitle: goalWeight.toStringAsFixed(1),
@@ -114,35 +156,66 @@ class _WeightStatusCell extends StatelessWidget {
   const _WeightStatusCell({
     required this.title,
     required this.subtitle,
-    this.isHighlighted = false,
   });
 
   final String title;
   final String subtitle;
-  final bool isHighlighted;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(title),
-        Text(
-          subtitle,
-          style: isHighlighted ? Theme.of(context).textTheme.bodyLarge : null,
+    return Expanded(
+      child: BaseCard(
+        padding: const EdgeInsets.symmetric(
+          // horizontal: AppDimens.paddingLarge,
+          vertical: AppDimens.paddingLarge,
         ),
-      ],
+        child: Column(
+          children: [
+            Text(
+              subtitle,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            AppSpacers.h4,
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class _WeightChart extends StatelessWidget {
+class _WeightChart extends ConsumerWidget {
   const _WeightChart();
 
   @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 200,
-      child: Placeholder(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(weightTrackerNotifierProvider);
+    return BaseCard(
+      height: 300,
+      width: double.maxFinite,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimens.paddingLarge,
+        vertical: AppDimens.paddingMedium,
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: PeriodSelector(
+              initiallySelectedPeriod: SelectedPeriod.year,
+              onSelected: (selectedPeriod) {},
+            ),
+          ),
+          AppSpacers.h24,
+          Expanded(child: WeightChart(weightRecords: state.records))
+        ],
+      ),
     );
   }
 }
