@@ -39,6 +39,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   numberpicker: ^2.1.2
   path_provider: ^2.0.15
+  fl_chart: ^0.63.0
 
 dev_dependencies:
   flutter_test:
