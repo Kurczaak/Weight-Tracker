@@ -20,6 +20,7 @@ class BaseCard extends StatelessWidget {
       height: height,
       width: width,
       child: Card(
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppDimens.baseRadius),
         ),
