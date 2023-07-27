@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
@@ -28,6 +27,8 @@ class PeriodSelector extends HookWidget {
     }
 
     return PopupMenuButton<SelectedPeriod>(
+      elevation: 0,
+      splashRadius: 0,
       position: PopupMenuPosition.under,
       offset: const Offset(AppDimens.padding2, AppDimens.padding4),
       shape: RoundedRectangleBorder(
@@ -45,8 +46,7 @@ class PeriodSelector extends HookWidget {
       onSelected: handleOnSelected,
       onOpened: () => isOpened.value = true,
       onCanceled: () => isOpened.value = false,
-      child: BaseCard(
-        width: AppDimens.periodPickerWidth,
+      child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimens.paddingLarge,
           vertical: AppDimens.paddingMedium,
@@ -56,7 +56,7 @@ class PeriodSelector extends HookWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(selectedPeriod.value?.name ?? 'Open Menu'),
-            const Spacer(),
+            AppSpacers.w12,
             Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down)
           ],
         ),
