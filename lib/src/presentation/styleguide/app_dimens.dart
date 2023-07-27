@@ -42,8 +42,8 @@ class AppDimens {
 
   // radiuses
   static const double baseRadius = 25;
-
   static const double periodPickerWidth = 200;
+  static const double statusCardSize = 200;
 }
 
 class AppSpacers {
