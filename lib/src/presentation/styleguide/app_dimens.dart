@@ -44,6 +44,10 @@ class AppDimens {
   static const double baseRadius = 25;
   static const double periodPickerWidth = 200;
   static const double statusCardSize = 200;
+
+  //===== Weight Chart section =====
+  static const double weightChartTitleReservedSize = 40;
+  static const double bottomTitleWidgetSpace = 20;
 }
 
 class AppSpacers {
