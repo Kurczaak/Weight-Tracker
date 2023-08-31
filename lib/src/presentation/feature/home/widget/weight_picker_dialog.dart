@@ -11,10 +11,12 @@ class WeightPickerDialog extends HookWidget {
     required this.onSaved,
     super.key,
     this.initialRecord,
+    this.showDateSelector = true,
   });
 
   final void Function(WeightRecord record) onSaved;
   final WeightRecord? initialRecord;
+  final bool showDateSelector;
 
   @override
   Widget build(BuildContext context) {
