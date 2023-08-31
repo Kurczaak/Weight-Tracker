@@ -2,6 +2,7 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao_consts.dart';
+import 'package:simple_weight_tracker/src/data/entity/user_config_entity.dart';
 import 'package:simple_weight_tracker/src/data/entity/weight_record_entity.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 
@@ -117,4 +118,11 @@ class LocalDaoImpl implements LocalDao {
     }
     return dateQuery;
   }
+
+  @override
+  Future<UserConfigEntity?> getUserConfig() => isar.userConfigEntitys.get(0);
+
+  @override
+  Future<void> saveUserConfig(UserConfigEntity userConfig) =>
+      isar.userConfigEntitys.put(userConfig);
 }

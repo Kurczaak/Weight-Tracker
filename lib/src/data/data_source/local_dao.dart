@@ -1,4 +1,4 @@
-import 'package:simple_weight_tracker/src/data/entity/weight_record_entity.dart';
+import 'package:simple_weight_tracker/src/data/entity/export_entity.dart';
 
 abstract class LocalDao {
   Future<void> init();
@@ -21,4 +21,6 @@ abstract class LocalDao {
   Future<WeightRecordEntity> addWeight(WeightRecordEntity weight);
   Future<void> updateWeight(WeightRecordEntity weight);
   Future<void> deleteWeight(WeightRecordEntity weight);
+  Future<UserConfigEntity?> getUserConfig();
+  Future<void> saveUserConfig(UserConfigEntity userConfig);
 }
