@@ -194,13 +194,13 @@ class _WeightStatusCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: BaseCard(
-        padding: const EdgeInsets.symmetric(
-          // horizontal: AppDimens.paddingLarge,
-          vertical: AppDimens.paddingLarge,
-        ),
-        child: InkWell(
-          onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        child: BaseCard(
+          padding: const EdgeInsets.symmetric(
+            // horizontal: AppDimens.paddingLarge,
+            vertical: AppDimens.paddingLarge,
+          ),
           child: Column(
             children: [
               Text(
