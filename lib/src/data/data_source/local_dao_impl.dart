@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao_consts.dart';
 import 'package:simple_weight_tracker/src/data/entity/weight_record_entity.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 
 class LocalDaoImpl implements LocalDao {
   LocalDaoImpl(this.isar);
@@ -111,7 +112,8 @@ class LocalDaoImpl implements LocalDao {
     if (fromDate != null && toDate != null) {
       dateQuery = weightsWhereQuery.dateBetween(fromDate, toDate);
     } else {
-      dateQuery = weightsWhereQuery.dateGreaterThan(DateTime(2023));
+      dateQuery =
+          weightsWhereQuery.dateGreaterThan(AppConsts.oldestPossibleDate);
     }
     return dateQuery;
   }
