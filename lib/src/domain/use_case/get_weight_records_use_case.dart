@@ -12,8 +12,8 @@ class GetWeightRecordsUseCase
   @override
   Future<List<WeightRecord>> execute(WeightRecordDataPaginator param) =>
       _repository.getWeights(
-        fromDate: param.fromDate,
-        toDate: param.toDate,
+        fromDate: param.dateBoundaries?.fromDate,
+        toDate: param.dateBoundaries?.toDate,
         dataPaginator: param.dataPaginator,
       );
 }

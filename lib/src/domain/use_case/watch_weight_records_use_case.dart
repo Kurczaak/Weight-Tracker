@@ -14,8 +14,8 @@ class WatchWeightRecordsUseCase
     WeightRecordDataPaginator param,
   ) async =>
       _repository.watchWeights(
-        fromDate: param.fromDate,
-        toDate: param.toDate,
+        fromDate: param.dateBoundaries?.fromDate,
+        toDate: param.dateBoundaries?.toDate,
         dataPaginator: param.dataPaginator,
       );
 }
