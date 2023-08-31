@@ -40,10 +40,11 @@ class WeightPickerDialog extends HookWidget {
         ),
         Row(
           children: [
-            _DateSelector(
-              initialDate: weightRecord.value.date,
-              onChanged: onDateChanged,
-            ),
+            if (showDateSelector)
+              _DateSelector(
+                initialDate: weightRecord.value.date,
+                onChanged: onDateChanged,
+              ),
             const Spacer(),
             SWTTextButton(
               'Cancel',
