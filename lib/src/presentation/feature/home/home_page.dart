@@ -217,7 +217,7 @@ class _WeightChart extends ConsumerWidget {
             alignment: Alignment.topRight,
             child: PeriodSelector(
               initiallySelectedPeriod: SelectedPeriod.month,
-              onSelected: notifier.select,
+              onSelected: notifier.selectPeriod,
             ),
           ),
           AppSpacers.h24,
