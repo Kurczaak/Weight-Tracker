@@ -27,7 +27,8 @@ class HomePage extends ConsumerWidget {
       body: _HomePageBody(
         currentRecord: state.latestWeight,
         firstRecord: state.initialWeight,
-        goalWeight: 80,
+        goalWeight: state.goalWeight,
+        onGoalWeightSelected: notifier.saveGoalWeight,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
@@ -60,11 +61,13 @@ class _HomePageBody extends StatelessWidget {
     required this.firstRecord,
     required this.currentRecord,
     required this.goalWeight,
+    required this.onGoalWeightSelected,
   });
 
   final WeightRecord? firstRecord;
   final WeightRecord? currentRecord;
-  final double goalWeight;
+  final double? goalWeight;
+  final void Function(double weight) onGoalWeightSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +88,7 @@ class _HomePageBody extends StatelessWidget {
                 firstRecord: firstRecord,
                 currentRecord: currentRecord,
                 goalWeight: goalWeight,
+                onGoalWeightSelected: onGoalWeightSelected,
               ),
               AppSpacers.h24,
               const _WeightChart(),
@@ -121,19 +125,21 @@ class _HomePageBody extends StatelessWidget {
   }
 }
 
-class _WeightStatusRow extends StatelessWidget {
+class _WeightStatusRow extends ConsumerWidget {
   const _WeightStatusRow({
     required this.firstRecord,
     required this.currentRecord,
     required this.goalWeight,
+    required this.onGoalWeightSelected,
   });
 
   final WeightRecord? firstRecord;
   final WeightRecord? currentRecord;
-  final double goalWeight;
+  final double? goalWeight;
+  final void Function(double weight) onGoalWeightSelected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -149,9 +155,27 @@ class _WeightStatusRow extends StatelessWidget {
         AppSpacers.w12,
         _WeightStatusCell(
           title: 'Goal',
-          subtitle: goalWeight.toStringAsFixed(1),
+          subtitle: goalWeight?.toStringAsFixed(1) ?? '--',
+          onTap: () => _onAddGoalWegith(context),
         ),
       ],
+    );
+  }
+
+  // TODO refactor
+  void _onAddGoalWegith(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => WeightPickerDialog(
+        showDateSelector: false,
+        initialRecord: WeightRecord(
+          weight: goalWeight ?? currentRecord?.weight ?? 0,
+          date: DateTime.now(),
+        ),
+        onSaved: (record) {
+          onGoalWeightSelected(record.weight);
+        },
+      ),
     );
   }
 }
@@ -160,10 +184,12 @@ class _WeightStatusCell extends StatelessWidget {
   const _WeightStatusCell({
     required this.title,
     required this.subtitle,
+    this.onTap,
   });
 
   final String title;
   final String subtitle;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -173,21 +199,24 @@ class _WeightStatusCell extends StatelessWidget {
           // horizontal: AppDimens.paddingLarge,
           vertical: AppDimens.paddingLarge,
         ),
-        child: Column(
-          children: [
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            AppSpacers.h4,
-            Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ],
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            children: [
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              AppSpacers.h4,
+              Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );

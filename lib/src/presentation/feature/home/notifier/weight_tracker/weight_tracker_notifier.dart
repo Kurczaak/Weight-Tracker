@@ -7,7 +7,6 @@ import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record_data_paginator.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
-import 'package:simple_weight_tracker/src/domain/use_case/save_goal_weight_use_case.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_state.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
@@ -23,6 +22,7 @@ final weightTrackerNotifierProvider = StateNotifierProvider.family<
   final watchInitialWeightUseCase =
       ref.watch(watchInitialWeightUseCaseProvider);
   final saveGoalWeightUseCase = ref.watch(saveGoalWeightUseCaseProvider);
+  final getGoalWeightUseCase = ref.watch(getGoalWeightUseCaseProvider);
 
   return WeightTrackerNotifier(
     saveWeightRecordUseCase: addWeightRecordUseCase,
@@ -30,6 +30,7 @@ final weightTrackerNotifierProvider = StateNotifierProvider.family<
     deleteWeightRecordUseCase: deleteWeightRecordUseCase,
     watchInitialWeightUseCase: watchInitialWeightUseCase,
     saveGoalWeightUseCase: saveGoalWeightUseCase,
+    getGoalWeightUseCase: getGoalWeightUseCase,
     dateBoundaries: dateBoundaries,
   );
 });
@@ -41,12 +42,14 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
     required DeleteWeightRecordUseCase deleteWeightRecordUseCase,
     required WatchInitialWeightUseCase watchInitialWeightUseCase,
     required SaveGoalWeightUseCase saveGoalWeightUseCase,
+    required GetGoalWeightUseCase getGoalWeightUseCase,
     required DateBoundaries? dateBoundaries,
   })  : _watchInitialWeightUseCase = watchInitialWeightUseCase,
         _deleteWeightRecordUseCase = deleteWeightRecordUseCase,
         _watchWeightRecordsUseCase = watchWeightRecordsUseCase,
         _saveWeightRecordUseCase = saveWeightRecordUseCase,
         _saveGoalWeightUseCase = saveGoalWeightUseCase,
+        _getGoalWeightUseCase = getGoalWeightUseCase,
         _dateBoundaries = dateBoundaries,
         super(const WeightTrackerState()) {
     init(dateBoundaries: _dateBoundaries);
@@ -58,6 +61,7 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
   final DeleteWeightRecordUseCase _deleteWeightRecordUseCase;
   final WatchInitialWeightUseCase _watchInitialWeightUseCase;
   final SaveGoalWeightUseCase _saveGoalWeightUseCase;
+  final GetGoalWeightUseCase _getGoalWeightUseCase;
 
   StreamSubscription<List<WeightRecord?>>? _weightRecordsSubscription;
 
@@ -88,10 +92,14 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
     });
   }
 
-  Future<void> saveGoalWeight(double weight) =>
-      _saveGoalWeightUseCase.call(weight);
+  Future<void> saveGoalWeight(double weight) async {
+    state = state.copyWith(goalWeight: weight);
+    await _saveGoalWeightUseCase.call(weight);
+  }
 
   Future<void> init({DateBoundaries? dateBoundaries}) async {
+    final goalWeight = await _getGoalWeightUseCase();
+
     final initiaRecord = await _watchInitialWeightUseCase();
     initiaRecord.fold(
       (l) => state = state.copyWith(
@@ -100,6 +108,7 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
       (r) => r.listen((event) {
         state = state.copyWith(
           initialWeight: event,
+          goalWeight: goalWeight,
         );
       }),
     );

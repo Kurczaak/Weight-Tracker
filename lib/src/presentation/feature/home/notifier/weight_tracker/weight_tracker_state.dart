@@ -9,6 +9,7 @@ class WeightTrackerState with _$WeightTrackerState {
     @Default([]) List<WeightRecord> records,
     WeightRecord? initialWeight,
     WeightRecord? latestWeight,
+    double? goalWeight,
     @Default(false) bool isError,
   }) = _WeightTrackerState;
 }
