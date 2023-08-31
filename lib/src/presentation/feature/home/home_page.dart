@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/notifier/period_selector_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/period_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/weight_chart.dart';
-import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker_notifier.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/fitlered_weight_tracker/filtered_weight_tracker_notifier.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
-import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
 class HomePage extends ConsumerWidget {
@@ -16,9 +17,12 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(weightTrackerNotifierProvider);
-    final notifier = ref.watch(weightTrackerNotifierProvider.notifier)
-      ..initWatchWeights(AppConsts.homePageRecordsCount);
+    final state = ref.watch(
+      weightTrackerNotifierProvider(null),
+    );
+    final notifier = ref.watch(
+      weightTrackerNotifierProvider(null).notifier,
+    );
     return Scaffold(
       body: _HomePageBody(
         currentRecord: state.latestWeight,
@@ -83,7 +87,7 @@ class _HomePageBody extends StatelessWidget {
                 goalWeight: goalWeight,
               ),
               AppSpacers.h24,
-              const Expanded(child: _WeightChart()),
+              const _WeightChart(),
               AppSpacers.h24,
               BaseCard(
                 width: AppDimens.statusCardSize,
@@ -108,7 +112,7 @@ class _HomePageBody extends StatelessWidget {
                     AppSpacers.h24,
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -195,7 +199,11 @@ class _WeightChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(weightTrackerNotifierProvider);
+    final state = ref.watch(filteredWeightTrackerProvider);
+
+    final notifier = ref.watch(
+      periodSelectorNotifierProvider.notifier,
+    );
     return BaseCard(
       height: 300,
       width: double.maxFinite,
@@ -208,12 +216,16 @@ class _WeightChart extends ConsumerWidget {
           Align(
             alignment: Alignment.topRight,
             child: PeriodSelector(
-              initiallySelectedPeriod: SelectedPeriod.year,
-              onSelected: (selectedPeriod) {},
+              initiallySelectedPeriod: SelectedPeriod.month,
+              onSelected: notifier.select,
             ),
           ),
           AppSpacers.h24,
-          Expanded(child: WeightChart(weightRecords: state.records))
+          Expanded(
+            child: WeightChart(
+              weightRecords: state,
+            ),
+          ),
         ],
       ),
     );
@@ -225,7 +237,9 @@ class _RecordsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(weightTrackerNotifierProvider);
+    final state = ref.watch(
+      weightTrackerNotifierProvider(null),
+    );
     return ListView.builder(
       itemCount: state.records.length,
       itemBuilder: (context, index) {
@@ -243,6 +257,10 @@ class _RecordsList extends ConsumerWidget {
   }
 
   void _onPressed(WeightRecord record, WidgetRef ref) {
-    ref.watch(weightTrackerNotifierProvider.notifier).removeRecord(record);
+    ref
+        .watch(
+          weightTrackerNotifierProvider(null).notifier,
+        )
+        .removeRecord(record);
   }
 }
