@@ -35,31 +35,51 @@ class PeriodSelector extends HookWidget {
         borderRadius: BorderRadius.circular(AppDimens.baseRadius),
       ),
       tooltip: tooltip,
-      itemBuilder: (context) => SelectedPeriod.values
+      itemBuilder: _buildItems,
+      onSelected: handleOnSelected,
+      onOpened: () => isOpened.value = true,
+      onCanceled: () => isOpened.value = false,
+      child: _PeriodSelectorBody(
+        selectedPeriod: selectedPeriod,
+        isOpened: isOpened,
+      ),
+    );
+  }
+
+  List<PopupMenuEntry<SelectedPeriod>> _buildItems(context) =>
+      SelectedPeriod.values
           .map(
             (e) => PopupMenuItem<SelectedPeriod>(
               value: e,
               child: Text(e.name),
             ),
           )
-          .toList(),
-      onSelected: handleOnSelected,
-      onOpened: () => isOpened.value = true,
-      onCanceled: () => isOpened.value = false,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.paddingLarge,
-          vertical: AppDimens.paddingMedium,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(selectedPeriod.value?.name ?? 'Open Menu'),
-            AppSpacers.w12,
-            Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down)
-          ],
-        ),
+          .toList();
+}
+
+class _PeriodSelectorBody extends StatelessWidget {
+  const _PeriodSelectorBody({
+    required this.selectedPeriod,
+    required this.isOpened,
+  });
+
+  final ValueNotifier<SelectedPeriod?> selectedPeriod;
+  final ValueNotifier<bool> isOpened;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: AppDimens.paddingMedium,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(selectedPeriod.value?.name ?? 'Open Menu'),
+          AppSpacers.w12,
+          Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down)
+        ],
       ),
     );
   }
