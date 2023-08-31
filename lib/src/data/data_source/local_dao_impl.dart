@@ -50,7 +50,7 @@ class LocalDaoImpl implements LocalDao {
   static Future<LocalDao> withIsarDB() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
-      [WeightRecordEntitySchema],
+      [WeightRecordEntitySchema, UserConfigEntitySchema],
       directory: dir.path,
     );
     return LocalDaoImpl(isar);
@@ -124,5 +124,7 @@ class LocalDaoImpl implements LocalDao {
 
   @override
   Future<void> saveUserConfig(UserConfigEntity userConfig) =>
-      isar.userConfigEntitys.put(userConfig);
+      isar.writeTxn(() async {
+        await isar.userConfigEntitys.put(userConfig);
+      });
 }
