@@ -7,6 +7,7 @@ import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record_data_paginator.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
+import 'package:simple_weight_tracker/src/domain/use_case/save_goal_weight_use_case.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_state.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
@@ -21,12 +22,14 @@ final weightTrackerNotifierProvider = StateNotifierProvider.family<
       ref.watch(deleteWeightRecordUseCaseProvider);
   final watchInitialWeightUseCase =
       ref.watch(watchInitialWeightUseCaseProvider);
+  final saveGoalWeightUseCase = ref.watch(saveGoalWeightUseCaseProvider);
 
   return WeightTrackerNotifier(
     saveWeightRecordUseCase: addWeightRecordUseCase,
     watchWeightRecordsUseCase: watchWeightRecordsUseCase,
     deleteWeightRecordUseCase: deleteWeightRecordUseCase,
     watchInitialWeightUseCase: watchInitialWeightUseCase,
+    saveGoalWeightUseCase: saveGoalWeightUseCase,
     dateBoundaries: dateBoundaries,
   );
 });
@@ -37,11 +40,13 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
     required WatchWeightRecordsUseCase watchWeightRecordsUseCase,
     required DeleteWeightRecordUseCase deleteWeightRecordUseCase,
     required WatchInitialWeightUseCase watchInitialWeightUseCase,
+    required SaveGoalWeightUseCase saveGoalWeightUseCase,
     required DateBoundaries? dateBoundaries,
   })  : _watchInitialWeightUseCase = watchInitialWeightUseCase,
         _deleteWeightRecordUseCase = deleteWeightRecordUseCase,
         _watchWeightRecordsUseCase = watchWeightRecordsUseCase,
         _saveWeightRecordUseCase = saveWeightRecordUseCase,
+        _saveGoalWeightUseCase = saveGoalWeightUseCase,
         _dateBoundaries = dateBoundaries,
         super(const WeightTrackerState()) {
     init(dateBoundaries: _dateBoundaries);
@@ -52,6 +57,7 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
   final WatchWeightRecordsUseCase _watchWeightRecordsUseCase;
   final DeleteWeightRecordUseCase _deleteWeightRecordUseCase;
   final WatchInitialWeightUseCase _watchInitialWeightUseCase;
+  final SaveGoalWeightUseCase _saveGoalWeightUseCase;
 
   StreamSubscription<List<WeightRecord?>>? _weightRecordsSubscription;
 
@@ -81,6 +87,9 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
       });
     });
   }
+
+  Future<void> saveGoalWeight(double weight) =>
+      _saveGoalWeightUseCase.call(weight);
 
   Future<void> init({DateBoundaries? dateBoundaries}) async {
     final initiaRecord = await _watchInitialWeightUseCase();
