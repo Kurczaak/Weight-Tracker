@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/date_boundaries.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
@@ -9,6 +8,7 @@ import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_state.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
+import 'package:simple_weight_tracker/src/utils/weight_record_extensions.dart';
 
 final weightTrackerNotifierProvider = StateNotifierProvider.family<
     WeightTrackerNotifier,
@@ -85,7 +85,7 @@ class WeightTrackerNotifier extends StateNotifier<WeightTrackerState> {
       _weightRecordsSubscription?.cancel();
       _weightRecordsSubscription = r.listen((event) {
         state = state.copyWith(
-          records: event.sortedBy((element) => element.date),
+          records: event.orderedByDate,
           latestWeight: event.isNotEmpty ? event.first : null,
         );
       });
