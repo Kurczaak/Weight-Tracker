@@ -241,29 +241,30 @@ class _WeightChart extends ConsumerWidget {
     final notifier = ref.watch(
       periodSelectorNotifierProvider.notifier,
     );
-    return BaseCard(
-      height: MediaQuery.of(context).size.height * .4,
-      width: double.maxFinite,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLarge,
-        vertical: AppDimens.paddingMedium,
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: PeriodSelector(
-              initiallySelectedPeriod: SelectedPeriod.month,
-              onSelected: notifier.selectPeriod,
+    return Expanded(
+      child: BaseCard(
+        width: double.maxFinite,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.paddingLarge,
+          vertical: AppDimens.paddingMedium,
+        ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: PeriodSelector(
+                initiallySelectedPeriod: SelectedPeriod.month,
+                onSelected: notifier.selectPeriod,
+              ),
             ),
-          ),
-          AppSpacers.h24,
-          Expanded(
-            child: WeightChart(
-              weightRecords: state,
+            AppSpacers.h24,
+            Expanded(
+              child: WeightChart(
+                weightRecords: state,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
