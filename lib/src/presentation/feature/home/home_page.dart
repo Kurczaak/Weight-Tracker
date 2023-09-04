@@ -26,6 +26,7 @@ class HomePage extends ConsumerWidget {
       weightTrackerNotifierProvider(null).notifier,
     );
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: _HomePageBody(
         currentRecord: state.latestWeight,
         firstRecord: state.initialWeight,
@@ -73,31 +74,26 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: AppColors.backgroundGradient,
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppDimens.paddingLarge,
-            horizontal: AppDimens.paddingLarge,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _WeightStatusRow(
-                firstRecord: firstRecord,
-                currentRecord: currentRecord,
-                goalWeight: goalWeight,
-                onGoalWeightSelected: onGoalWeightSelected,
-              ),
-              AppSpacers.h24,
-              const _WeightChart(),
-              AppSpacers.h24,
-              const _ProgressStatus(),
-            ],
-          ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppDimens.paddingLarge,
+          horizontal: AppDimens.paddingLarge,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _WeightStatusRow(
+              firstRecord: firstRecord,
+              currentRecord: currentRecord,
+              goalWeight: goalWeight,
+              onGoalWeightSelected: onGoalWeightSelected,
+            ),
+            AppSpacers.h24,
+            const _WeightChart(),
+            AppSpacers.h24,
+            const _ProgressStatus(),
+          ],
         ),
       ),
     );
