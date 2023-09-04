@@ -12,6 +12,8 @@
     "general__goal": "Cel",
     "general__current": "Obecnie",
     "general__start": "Start",
+    "general__home": "Home",
+    "general__list": "Lista",
     "status__status": "Status",
     "status__good": "Super",
     "status__bad": "Źle",
