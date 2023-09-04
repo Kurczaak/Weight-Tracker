@@ -11,6 +11,7 @@ import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/fit
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/widget/weight_picker_dialog.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
 class HomePage extends ConsumerWidget {
@@ -94,34 +95,43 @@ class _HomePageBody extends StatelessWidget {
               AppSpacers.h24,
               const _WeightChart(),
               AppSpacers.h24,
-              BaseCard(
-                width: AppDimens.statusCardSize,
-                height: AppDimens.statusCardSize,
-                child: Column(
-                  children: [
-                    // TODO handle different statuses
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          context.str.status__good,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium
-                              ?.copyWith(color: AppColors.positiveColor),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      context.str.status__status,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    AppSpacers.h24,
-                  ],
-                ),
-              ),
+              const _ProgressStatus(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ProgressStatus extends StatelessWidget {
+  const _ProgressStatus();
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseCard(
+      width: AppDimens.statusCardSize,
+      height: AppDimens.statusCardSize,
+      child: Column(
+        children: [
+          // TODO handle different statuses
+          Expanded(
+            child: Center(
+              child: Text(
+                context.str.status__good,
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium
+                    ?.copyWith(color: AppColors.positiveColor),
+              ),
+            ),
+          ),
+          Text(
+            context.str.status__status,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          AppSpacers.h24,
+        ],
       ),
     );
   }
@@ -147,39 +157,36 @@ class _WeightStatusRow extends ConsumerWidget {
       children: [
         _WeightStatusCell(
           title: context.str.general__start,
-          subtitle: firstRecord?.weight.toStringAsFixed(1) ?? '-',
+          subtitle: firstRecord?.weight.toStringAsFixed(1),
         ),
         AppSpacers.w12,
         _WeightStatusCell(
           title: context.str.general__current,
-          subtitle: currentRecord?.weight.toStringAsFixed(1) ?? '-',
+          subtitle: currentRecord?.weight.toStringAsFixed(1),
         ),
         AppSpacers.w12,
         _WeightStatusCell(
           title: context.str.general__goal,
-          subtitle: goalWeight?.toStringAsFixed(1) ?? '--',
+          subtitle: goalWeight?.toStringAsFixed(1),
           onTap: () => _onAddGoalWegith(context),
         ),
       ],
     );
   }
 
-  // TODO refactor
-  void _onAddGoalWegith(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => WeightPickerDialog(
-        showDateSelector: false,
-        initialRecord: WeightRecord(
-          weight: goalWeight ?? currentRecord?.weight ?? 0,
-          date: DateTime.now(),
+  void _onAddGoalWegith(BuildContext context) => showDialog<void>(
+        context: context,
+        builder: (context) => WeightPickerDialog(
+          showDateSelector: false,
+          initialRecord: WeightRecord(
+            weight: goalWeight ?? currentRecord?.weight ?? 0,
+            date: DateTime.now(),
+          ),
+          onSaved: (record) {
+            onGoalWeightSelected(record.weight);
+          },
         ),
-        onSaved: (record) {
-          onGoalWeightSelected(record.weight);
-        },
-      ),
-    );
-  }
+      );
 }
 
 class _WeightStatusCell extends StatelessWidget {
@@ -190,7 +197,7 @@ class _WeightStatusCell extends StatelessWidget {
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final VoidCallback? onTap;
 
   @override
@@ -200,13 +207,12 @@ class _WeightStatusCell extends StatelessWidget {
         onTap: onTap,
         child: BaseCard(
           padding: const EdgeInsets.symmetric(
-            // horizontal: AppDimens.paddingLarge,
             vertical: AppDimens.paddingLarge,
           ),
           child: Column(
             children: [
               Text(
-                subtitle,
+                subtitle ?? AppConsts.emptyPlaceholder,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               AppSpacers.h4,
@@ -236,7 +242,7 @@ class _WeightChart extends ConsumerWidget {
       periodSelectorNotifierProvider.notifier,
     );
     return BaseCard(
-      height: 300,
+      height: MediaQuery.of(context).size.height * .4,
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.paddingLarge,

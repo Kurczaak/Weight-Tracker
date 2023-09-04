@@ -16,4 +16,7 @@ class AppConsts {
   static const double mobileXAxisPointsCount = 3;
   static const double tabletXAxisPointsCount = 7;
   static const double desktopXAxisPointsCount = 12;
+
+  // String related
+  static const String emptyPlaceholder = '-';
 }
