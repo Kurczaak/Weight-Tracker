@@ -19,4 +19,8 @@ class AppConsts {
 
   // String related
   static const String emptyPlaceholder = '-';
+
+  // Durations
+  static const Duration bottomBarNavigationDuration =
+      Duration(milliseconds: 300);
 }
