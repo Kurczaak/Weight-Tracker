@@ -1,0 +1,19 @@
+{
+    "@@locale": "en",
+    "hello_world": "Hello, world!",
+    "general__open": "Open",
+    "general__cancel": "Cancel",
+    "general__save": "Save",
+    "general__month": "Month",
+    "general__quarter": "Quarter",
+    "general__halfYear": "Half year",
+    "general__year": "Year",
+    "general__beginning": "From the beginning",
+    "general__goal": "Goal",
+    "general__current": "Currently",
+    "general__start": "Start",
+    "status__status": "Status",
+    "status__good": "Great",
+    "status__bad": "Poor",
+    "add_weight_dialog__header": "Add weight"
+}

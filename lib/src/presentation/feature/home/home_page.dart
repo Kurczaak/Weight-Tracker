@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
@@ -98,10 +99,11 @@ class _HomePageBody extends StatelessWidget {
                 height: AppDimens.statusCardSize,
                 child: Column(
                   children: [
+                    // TODO handle different statuses
                     Expanded(
                       child: Center(
                         child: Text(
-                          'GOOD',
+                          context.str.status__good,
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium
@@ -110,7 +112,7 @@ class _HomePageBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'status',
+                      context.str.status__status,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     AppSpacers.h24,
@@ -144,17 +146,17 @@ class _WeightStatusRow extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _WeightStatusCell(
-          title: 'Start',
+          title: context.str.general__start,
           subtitle: firstRecord?.weight.toStringAsFixed(1) ?? '-',
         ),
         AppSpacers.w12,
         _WeightStatusCell(
-          title: 'Current',
+          title: context.str.general__current,
           subtitle: currentRecord?.weight.toStringAsFixed(1) ?? '-',
         ),
         AppSpacers.w12,
         _WeightStatusCell(
-          title: 'Goal',
+          title: context.str.general__goal,
           subtitle: goalWeight?.toStringAsFixed(1) ?? '--',
           onTap: () => _onAddGoalWegith(context),
         ),

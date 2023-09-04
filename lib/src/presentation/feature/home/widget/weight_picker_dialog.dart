@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/swt_text_button.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
@@ -31,7 +32,7 @@ class WeightPickerDialog extends HookWidget {
         weightRecord.value = weightRecord.value.copyWith(date: date);
 
     return SimpleDialog(
-      title: const Text('Add Weight'),
+      title: Text(context.str.add_weight_dialog__header),
       contentPadding: const EdgeInsets.all(20),
       children: [
         _WeightNumberPickers(
@@ -47,11 +48,11 @@ class WeightPickerDialog extends HookWidget {
               ),
             const Spacer(),
             SWTTextButton(
-              'Cancel',
+              context.str.general__cancel,
               onPressed: () => Navigator.of(context).pop(),
             ),
             SWTTextButton(
-              'Save  ',
+              context.str.general__save,
               onPressed: () => _onSavePressed(context, weightRecord.value),
             ),
           ],

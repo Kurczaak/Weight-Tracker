@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/date_boundaries.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
 enum SelectedPeriod {
   month(1),
-  quarterly(AppConsts.monthsInYear ~/ 4),
+  quarter(AppConsts.monthsInYear ~/ 4),
   halfYear(AppConsts.monthsInYear ~/ 2),
   year(AppConsts.monthsInYear),
-  begining(null);
+  beginning(null);
 
   const SelectedPeriod(this.monthsCount);
 
@@ -23,4 +25,12 @@ extension SelectedPeriodExtension on SelectedPeriod {
 
   DateBoundaries get dateBoundaries =>
       DateBoundaries(fromDate: fromDate, toDate: toDate);
+
+  String localizedName(BuildContext context) => switch (this) {
+        SelectedPeriod.month => context.str.general__month,
+        SelectedPeriod.quarter => context.str.general__quarter,
+        SelectedPeriod.halfYear => context.str.general__halfYear,
+        SelectedPeriod.year => context.str.general__year,
+        SelectedPeriod.beginning => context.str.general__beginning,
+      };
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
@@ -46,12 +47,12 @@ class PeriodSelector extends HookWidget {
     );
   }
 
-  List<PopupMenuEntry<SelectedPeriod>> _buildItems(context) =>
+  List<PopupMenuEntry<SelectedPeriod>> _buildItems(BuildContext context) =>
       SelectedPeriod.values
           .map(
             (e) => PopupMenuItem<SelectedPeriod>(
               value: e,
-              child: Text(e.name),
+              child: Text(e.localizedName(context)),
             ),
           )
           .toList();
@@ -76,9 +77,10 @@ class _PeriodSelectorBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(selectedPeriod.value?.name ?? 'Open Menu'),
+          Text(selectedPeriod.value?.localizedName(context) ??
+              context.str.general__open),
           AppSpacers.w12,
-          Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down)
+          Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down),
         ],
       ),
     );
