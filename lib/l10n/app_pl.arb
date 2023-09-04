@@ -1,0 +1,19 @@
+{
+    "@@locale": "pl",
+    "hello_world": "Witaj świecie!",
+    "general__open": "Otwórz",
+    "general__cancel": "Anuluj",
+    "general__save": "Zapisz",
+    "general__month": "Miesiąc",
+    "general__quarter": "Kwartał",
+    "general__halfYear": "Pół roku",
+    "general__year": "Rok",
+    "general__beginning": "Od początku",
+    "general__goal": "Cel",
+    "general__current": "Obecnie",
+    "general__start": "Start",
+    "status__status": "Status",
+    "status__good": "Super",
+    "status__bad": "Źle",
+    "add_weight_dialog__header": "Dodaj wagę"
+}
