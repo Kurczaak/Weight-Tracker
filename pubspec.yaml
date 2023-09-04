@@ -9,6 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
   # Dependency Injection (DI)
   get_it: ^7.6.0
   injectable: ^2.1.2
@@ -53,3 +56,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
