@@ -262,36 +262,3 @@ class _WeightChart extends ConsumerWidget {
     );
   }
 }
-
-class _RecordsList extends ConsumerWidget {
-  const _RecordsList();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(
-      weightTrackerNotifierProvider(null),
-    );
-    return ListView.builder(
-      itemCount: state.records.length,
-      itemBuilder: (context, index) {
-        final record = state.records[index];
-        return ListTile(
-          title: Text(record.weight.toString()),
-          subtitle: Text(record.date.toString()),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => _onPressed(record, ref),
-          ),
-        );
-      },
-    );
-  }
-
-  void _onPressed(WeightRecord record, WidgetRef ref) {
-    ref
-        .watch(
-          weightTrackerNotifierProvider(null).notifier,
-        )
-        .removeRecord(record);
-  }
-}
