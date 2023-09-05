@@ -10,8 +10,17 @@ class WeightRepositoryImpl implements WeightRepository {
   final LocalDao _localDao;
 
   @override
-  Future<WeightRecord> addWeight(WeightRecord weight) =>
-      _localDao.addWeight(weight.toEntity()).then((value) => value.toModel());
+  Future<WeightRecord> addWeight(WeightRecord weight) {
+    // Make sure only year, month and day are distinguished
+    final date = DateTime(
+      weight.date.year,
+      weight.date.month,
+      weight.date.day,
+    );
+    return _localDao
+        .addWeight(weight.copyWith(date: date).toEntity())
+        .then((value) => value.toModel());
+  }
 
   @override
   Future<void> deleteWeight(WeightRecord weight) => _localDao.deleteWeight(
