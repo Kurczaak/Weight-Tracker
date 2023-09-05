@@ -38,6 +38,7 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      // TODO (kura): debug purposes only. Remove in production
       appBar: kDebugMode
           ? AppBar(
               title: Row(
