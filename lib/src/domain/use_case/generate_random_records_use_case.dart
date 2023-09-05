@@ -17,13 +17,14 @@ class GenerateRandomRecordsUseCase extends UseCase<void, int> {
     for (var i = 0; i < param; i++) {
       final random = Random();
       a += random.nextDouble() - .5;
-
-      await _repository.addWeight(
-        WeightRecord(
-          weight: 80 + a,
-          date: DateTime.now().subtract(Duration(days: i)),
-        ),
-      );
+      if (i.isEven) {
+        await _repository.addWeight(
+          WeightRecord(
+            weight: 80 + a,
+            date: DateTime.now().subtract(Duration(days: i)),
+          ),
+        );
+      }
     }
   }
 }
