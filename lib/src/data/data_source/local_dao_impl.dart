@@ -26,6 +26,11 @@ class LocalDaoImpl implements LocalDao {
       );
 
   @override
+  Future<void> deleteAllWeights() => isar.writeTxn(
+        () => isar.weightRecordEntitys.clear(),
+      );
+
+  @override
   Future<List<WeightRecordEntity>> getWeightsBetweenDates({
     int? pageNumber,
     int? pageSize,

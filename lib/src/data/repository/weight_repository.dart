@@ -11,6 +11,7 @@ abstract class WeightRepository {
   Future<WeightRecord> addWeight(WeightRecord weight);
   Future<void> updateWeight(WeightRecord weight);
   Future<void> deleteWeight(WeightRecord weight);
+  Future<void> deletAllWeights();
   Stream<WeightRecord?> watchFirstWeightRecord();
   Stream<WeightRecord?> watchLastWeightRecord();
   Stream<List<WeightRecord>> watchWeights({

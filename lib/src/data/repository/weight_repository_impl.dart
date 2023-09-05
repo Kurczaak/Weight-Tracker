@@ -28,6 +28,9 @@ class WeightRepositoryImpl implements WeightRepository {
       );
 
   @override
+  Future<void> deletAllWeights() => _localDao.deleteAllWeights();
+
+  @override
   Future<List<WeightRecord>> getWeights({
     DateTime? fromDate,
     DateTime? toDate,

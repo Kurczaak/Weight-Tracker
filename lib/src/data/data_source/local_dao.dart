@@ -21,6 +21,7 @@ abstract class LocalDao {
   Future<WeightRecordEntity> addWeight(WeightRecordEntity weight);
   Future<void> updateWeight(WeightRecordEntity weight);
   Future<void> deleteWeight(WeightRecordEntity weight);
+  Future<void> deleteAllWeights();
   Future<UserConfigEntity?> getUserConfig();
   Future<void> saveUserConfig(UserConfigEntity userConfig);
 }

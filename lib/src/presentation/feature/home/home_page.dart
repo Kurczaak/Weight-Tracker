@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/notifier/period_selector_notifier.dart';
@@ -25,8 +27,33 @@ class HomePage extends ConsumerWidget {
     final notifier = ref.watch(
       weightTrackerNotifierProvider(null).notifier,
     );
+
+    final generateRandomRecords = ref.watch(
+      generateRandomRecordsUseCaseProvider,
+    );
+
+    final deleteAllRecords = ref.watch(
+      deleteAllRecordsUseCaseProvider,
+    );
+
     return Scaffold(
       backgroundColor: Colors.transparent,
+      appBar: kDebugMode
+          ? AppBar(
+              title: Row(
+                children: [
+                  ElevatedButton(
+                    child: const Text('Generate random records'),
+                    onPressed: () => generateRandomRecords(365),
+                  ),
+                  ElevatedButton(
+                    onPressed: deleteAllRecords.call,
+                    child: const Text('Delete all'),
+                  ),
+                ],
+              ),
+            )
+          : null,
       body: _HomePageBody(
         currentRecord: state.latestWeight,
         firstRecord: state.initialWeight,
