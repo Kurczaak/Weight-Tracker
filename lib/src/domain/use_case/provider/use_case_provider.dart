@@ -4,6 +4,7 @@ import 'package:simple_weight_tracker/src/data/providers/weight_repository_provi
 import 'package:simple_weight_tracker/src/domain/use_case/delete_all_records_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/generate_random_records_use_case.dart';
+import 'package:simple_weight_tracker/src/domain/use_case/group_records_use_case.dart';
 
 // CRUD operations
 
@@ -45,6 +46,12 @@ final deleteWeightRecordUseCaseProvider = Provider<DeleteWeightRecordUseCase>(
     final repo = ref.watch(weightRepositoryProvider);
     return DeleteWeightRecordUseCase(repo);
   },
+);
+
+// Utils
+
+final groupRecordsUseCaseProvider = Provider<GroupRecordsUseCase>(
+  (ref) => GroupRecordsUseCase(),
 );
 
 // DEBUG
