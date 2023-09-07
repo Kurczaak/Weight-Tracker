@@ -18,8 +18,9 @@ extension MeanWeighExtension on MeanWeight {
       ? null
       : records.map((e) => e.weight).reduce((a, b) => a + b) / records.length;
 
-  (DateTime lowerBoud, DateTime upperBound) get dateBound {
+  DateBoundaries get dateBoundaries {
     final sortedRecords = records.sorted((a, b) => a.date.compareTo(b.date));
-    return (sortedRecords.first.date, sortedRecords.last.date);
+    return DateBoundaries(
+        fromDate: sortedRecords.first.date, toDate: sortedRecords.last.date);
   }
 }
