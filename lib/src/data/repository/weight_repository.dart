@@ -1,5 +1,5 @@
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 abstract class WeightRepository {
   Future<void> init();

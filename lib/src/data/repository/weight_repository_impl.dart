@@ -2,7 +2,7 @@ import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/mappers/weight_record_mappers.dart';
 import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart';
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 class WeightRepositoryImpl implements WeightRepository {
   WeightRepositoryImpl(this._localDao);
