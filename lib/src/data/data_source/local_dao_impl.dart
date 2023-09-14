@@ -173,10 +173,12 @@ class LocalDaoImpl implements LocalDao {
   ) {
     final record = weeklyMeanWeight.weightRecords
         .firstWhereOrNull((element) => element.id == weight.id);
+    final weighRecords = [...weeklyMeanWeight.weightRecords];
     if (record != null) {
-      weeklyMeanWeight.weightRecords.remove(record);
+      weighRecords.remove(record);
     }
-    weeklyMeanWeight.weightRecords.add(weight.toEmbededModel());
+    weighRecords.add(weight.toEmbededModel());
+    weeklyMeanWeight.weightRecords = weighRecords;
   }
 
   /// Updates the monthly mean weight entity with the new weight record if
@@ -205,10 +207,12 @@ class LocalDaoImpl implements LocalDao {
   ) {
     final record = monthlyMeanWeight.weightRecords
         .firstWhereOrNull((element) => element.id == weight.id);
+    final weighRecords = [...monthlyMeanWeight.weightRecords];
     if (record != null) {
-      monthlyMeanWeight.weightRecords.remove(record);
+      weighRecords.remove(record);
     }
-    monthlyMeanWeight.weightRecords.add(weight.toEmbededModel());
+    weighRecords.add(weight.toEmbededModel());
+    monthlyMeanWeight.weightRecords = weighRecords;
   }
 
   /// Deletes the weight record from the weekly mean weight entity if
