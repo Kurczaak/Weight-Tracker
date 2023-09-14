@@ -12,7 +12,7 @@ class WeeklyMeanWeightEntity {
   /// Year * 100 + week number
   Id? id;
 
-  final List<EmbededWeightRecord> weightRecords;
+  List<EmbededWeightRecord> weightRecords;
 }
 
 @collection
@@ -25,7 +25,7 @@ class MonthlyMeanWeightEntity {
   /// Year * 100 + month number
   Id? id;
 
-  final List<EmbededWeightRecord> weightRecords;
+  List<EmbededWeightRecord> weightRecords;
 }
 
 @embedded
