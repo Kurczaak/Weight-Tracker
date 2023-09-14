@@ -36,6 +36,11 @@ final getGoalWeightUseCaseProvider = Provider<GetGoalWeightUseCase>((ref) {
   return GetGoalWeightUseCase(repo);
 });
 
+final getMeanRecordsUseCaseProvider = Provider<GetMeanRecordsUseCase>((ref) {
+  final repo = ref.watch(weightRepositoryProvider);
+  return GetMeanRecordsUseCase(repo);
+});
+
 // UPDATE
 
 // DELETE

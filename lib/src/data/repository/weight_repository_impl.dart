@@ -2,6 +2,7 @@ import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/mappers/weight_record_mappers.dart';
 import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart';
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/mean_weight.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 class WeightRepositoryImpl implements WeightRepository {
@@ -79,4 +80,14 @@ class WeightRepositoryImpl implements WeightRepository {
           .map(
             (event) => event.toModelList(),
           );
+
+  @override
+  Stream<List<MeanWeight>> watchMontlyMeanWeights() => _localDao
+      .getWeeklyMeanWeights()
+      .map((event) => event?.toModelList() ?? []);
+
+  @override
+  Stream<List<MeanWeight>> watchWeeklyMeanWeights() => _localDao
+      .getMonthlyMeanWeights()
+      .map((event) => event?.toModelList() ?? []);
 }

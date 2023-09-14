@@ -1,4 +1,5 @@
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/mean_weight.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 abstract class WeightRepository {
@@ -19,4 +20,7 @@ abstract class WeightRepository {
     DateTime? toDate,
     DataPaginator? dataPaginator,
   });
+
+  Stream<List<MeanWeight>> watchMontlyMeanWeights();
+  Stream<List<MeanWeight>> watchWeeklyMeanWeights();
 }

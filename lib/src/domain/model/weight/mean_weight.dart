@@ -18,3 +18,8 @@ class MeanWeight with _$MeanWeight {
     return (orderedRecords.first.date, orderedRecords.last.date);
   }
 }
+
+enum MeanWeightType {
+  week,
+  month,
+}
