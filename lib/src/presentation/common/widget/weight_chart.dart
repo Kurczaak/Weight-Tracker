@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
