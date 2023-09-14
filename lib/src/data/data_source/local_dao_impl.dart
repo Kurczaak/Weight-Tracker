@@ -64,7 +64,12 @@ class LocalDaoImpl implements LocalDao {
   static Future<LocalDao> withIsarDB() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
-      [WeightRecordEntitySchema, UserConfigEntitySchema],
+      [
+        WeightRecordEntitySchema,
+        UserConfigEntitySchema,
+        MonthlyMeanWeightEntitySchema,
+        WeeklyMeanWeightEntitySchema,
+      ],
       directory: dir.path,
     );
     return LocalDaoImpl(isar);
