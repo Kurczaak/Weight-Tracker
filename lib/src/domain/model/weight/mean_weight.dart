@@ -8,14 +8,18 @@ part 'mean_weight.freezed.dart';
 class MeanWeight with _$MeanWeight {
   const factory MeanWeight({
     required List<WeightRecord> weightRecords,
+    required int? id,
   }) = _MeanWeight;
 
   const MeanWeight._();
 
   double? get meanWeight => weightRecords.meanWeight;
-  (DateTime fromDate, DateTime toDate) get period {
+  ({DateTime fromDate, DateTime toDate}) get period {
     final orderedRecords = weightRecords.orderedByDate;
-    return (orderedRecords.first.date, orderedRecords.last.date);
+    return (
+      fromDate: orderedRecords.first.date,
+      toDate: orderedRecords.last.date
+    );
   }
 }
 

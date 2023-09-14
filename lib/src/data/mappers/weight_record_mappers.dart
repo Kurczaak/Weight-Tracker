@@ -44,6 +44,7 @@ extension WeightRecordEntityListMappers on List<WeightRecordEntity> {
 
 extension WeeklyMeanWeightEntityMappers on WeeklyMeanWeightEntity {
   MeanWeight toModel() => MeanWeight(
+        id: id,
         weightRecords: weightRecords.toModelList(),
       );
 }
@@ -54,6 +55,7 @@ extension WeeklyMeanWeightEntityListMappers on List<WeeklyMeanWeightEntity> {
 
 extension MonthlyMeanWeightEntityMappers on MonthlyMeanWeightEntity {
   MeanWeight toModel() => MeanWeight(
+        id: id,
         weightRecords: weightRecords.toModelList(),
       );
 }
