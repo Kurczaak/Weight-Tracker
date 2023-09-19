@@ -1,6 +1,6 @@
 import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart';
 import 'package:simple_weight_tracker/src/domain/base/base_use_case.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/export_model.dart';
 import 'package:simple_weight_tracker/src/utils/double_extensions.dart';
 
 /// Debug purposes only
@@ -19,6 +19,10 @@ class GenerateRandomRecordsUseCase extends UseCase<void, int> {
       if (i.isEven) {
         await _repository.addWeight(
           WeightRecord(
+            // weight: DateTime.now()
+            //     .subtract(Duration(days: i))
+            //     .weekNumber
+            //     .toDouble(),
             weight: 80 + a.roundTo(1),
             date: DateTime.now().subtract(Duration(days: i)),
           ),
