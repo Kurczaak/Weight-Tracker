@@ -17,5 +17,8 @@
     "status__status": "Status",
     "status__good": "Great",
     "status__bad": "Poor",
-    "add_weight_dialog__header": "Add weight"
+    "add_weight_dialog__header": "Add weight",
+    "records_list__daily": "Daily",
+    "records_list__weekly": "Weekly",
+    "records_list__monthly": "Monthly"
 }
