@@ -6,9 +6,13 @@ extension DateTimeExtensions on DateTime {
 
   DateFormat get dayMonthYearShort => DateFormat('dd.MM');
 
+  DateFormat get monthFormat => DateFormat('MMMM yyyy');
+
   String toFormattedString() {
     return dayMonthYear.format(this);
   }
+
+  String get monthYearFormatted => monthFormat.format(this);
 
   String toShortFormat() => dayMonthYearShort.format(this);
 
