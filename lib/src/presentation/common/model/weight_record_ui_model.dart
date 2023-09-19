@@ -52,4 +52,10 @@ extension WeightRecordUIModelTypeExtension on WeightRecordUIModelType {
         WeightRecordUIModelType.weekly => context.str.records_list__weekly,
         WeightRecordUIModelType.monthly => context.str.records_list__monthly,
       };
+
+  MeanWeightType toMeanWeightType() => switch (this) {
+        WeightRecordUIModelType.weekly => MeanWeightType.week,
+        WeightRecordUIModelType.monthly => MeanWeightType.month,
+        _ => throw Exception('Unsupported type'),
+      };
 }
