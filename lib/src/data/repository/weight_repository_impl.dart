@@ -83,11 +83,11 @@ class WeightRepositoryImpl implements WeightRepository {
 
   @override
   Stream<List<MeanWeight>> watchMontlyMeanWeights() => _localDao
-      .getWeeklyMeanWeights()
+      .getMonthlyMeanWeights()
       .map((event) => event?.toModelList() ?? []);
 
   @override
   Stream<List<MeanWeight>> watchWeeklyMeanWeights() => _localDao
-      .getMonthlyMeanWeights()
+      .getWeeklyMeanWeights()
       .map((event) => event?.toModelList() ?? []);
 }

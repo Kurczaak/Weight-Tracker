@@ -261,8 +261,8 @@ class LocalDaoImpl implements LocalDao {
 
   @override
   Stream<List<MonthlyMeanWeightEntity>?> getMonthlyMeanWeights() =>
-      isar.monthlyMeanWeightEntitys.where().watch();
+      isar.monthlyMeanWeightEntitys.where().watch(fireImmediately: true);
   @override
   Stream<List<WeeklyMeanWeightEntity>?> getWeeklyMeanWeights() =>
-      isar.weeklyMeanWeightEntitys.where().watch();
+      isar.weeklyMeanWeightEntitys.where().watch(fireImmediately: true);
 }
