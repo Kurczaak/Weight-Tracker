@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/notifier/period_selector_notifier.dart';
-import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/period_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/weight_chart.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/fitlered_weight_tracker/filtered_weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_notifier.dart';
@@ -38,23 +37,6 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      // TODO (kura): debug purposes only. Remove in production
-      appBar: kDebugMode
-          ? AppBar(
-              title: Row(
-                children: [
-                  ElevatedButton(
-                    child: const Text('Generate random records'),
-                    onPressed: () => generateRandomRecords(100),
-                  ),
-                  ElevatedButton(
-                    onPressed: deleteAllRecords.call,
-                    child: const Text('Delete all'),
-                  ),
-                ],
-              ),
-            )
-          : null,
       body: _HomePageBody(
         currentRecord: state.latestWeight,
         firstRecord: state.initialWeight,
@@ -102,27 +84,25 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppDimens.paddingLarge,
-          horizontal: AppDimens.paddingLarge,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _WeightStatusRow(
-              firstRecord: firstRecord,
-              currentRecord: currentRecord,
-              goalWeight: goalWeight,
-              onGoalWeightSelected: onGoalWeightSelected,
-            ),
-            AppSpacers.h24,
-            const _WeightChart(),
-            AppSpacers.h24,
-            const _ProgressStatus(),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: AppDimens.paddingLarge,
+        horizontal: AppDimens.paddingLarge,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _WeightStatusRow(
+            firstRecord: firstRecord,
+            currentRecord: currentRecord,
+            goalWeight: goalWeight,
+            onGoalWeightSelected: onGoalWeightSelected,
+          ),
+          AppSpacers.h24,
+          const _WeightChart(),
+          AppSpacers.h24,
+          const _ProgressStatus(),
+        ],
       ),
     );
   }
@@ -276,9 +256,9 @@ class _WeightChart extends ConsumerWidget {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: PeriodSelector(
-                initiallySelectedPeriod: SelectedPeriod.month,
-                onSelected: notifier.selectPeriod,
+              child: ItemSelector<SelectedPeriod>(
+                onSelected: (item) => notifier.selectPeriod(item.value),
+                items: _buildPeriodItems(context),
               ),
             ),
             AppSpacers.h24,
@@ -291,5 +271,16 @@ class _WeightChart extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  List<SelectorItem<SelectedPeriod>> _buildPeriodItems(BuildContext context) {
+    return SelectedPeriod.values
+        .map(
+          (e) => SelectorItem(
+            value: e,
+            name: e.localizedName(context),
+          ),
+        )
+        .toList();
   }
 }
