@@ -37,6 +37,7 @@ class WeightChart extends StatelessWidget {
         titlesData: _buildTitlesData(context),
         lineBarsData: [
           _buildWeightRecordsBarData(),
+          if (goalWeight != null) _buildGoalWeightBarData(),
         ],
       ),
     );
@@ -83,6 +84,19 @@ class WeightChart extends StatelessWidget {
     return LineChartBarData(
       spots: _mapWeightRecordsToSpots(),
       isCurved: true,
+    );
+  }
+
+  LineChartBarData _buildGoalWeightBarData() {
+    return LineChartBarData(
+      color: AppColors.transparent,
+      show: goalWeight != null,
+      spots: goalWeight == null
+          ? []
+          : [
+              FlSpot(0, goalWeight! + 1.0),
+              FlSpot(weightRecords.length - 1, goalWeight! + 1),
+            ],
     );
   }
 
