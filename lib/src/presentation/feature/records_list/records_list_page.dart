@@ -16,34 +16,39 @@ class RecordsListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(weightsScrollListNotifierProvider);
     final notifier = ref.watch(weightsScrollListNotifierProvider.notifier);
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: ItemSelector<WeightRecordUIModelType>(
-            onSelected: (item) {
-              switch (item.value) {
-                case WeightRecordUIModelType.daily:
-                  notifier.watchDailyWeightRecords(
-                    pageNumber: 0,
-                    pageSize: 40,
-                  );
-                case WeightRecordUIModelType.weekly:
-                  notifier.watchMeanRecord(WeightRecordUIModelType.weekly);
-                case WeightRecordUIModelType.monthly:
-                  notifier.watchMeanRecord(WeightRecordUIModelType.monthly);
-              }
-            },
-            items: _buildItems(context),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimens.paddingLarge,
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: ItemSelector<WeightRecordUIModelType>(
+              onSelected: (item) {
+                switch (item.value) {
+                  case WeightRecordUIModelType.daily:
+                    notifier.watchDailyWeightRecords(
+                      pageNumber: 0,
+                      pageSize: 40,
+                    );
+                  case WeightRecordUIModelType.weekly:
+                    notifier.watchMeanRecord(WeightRecordUIModelType.weekly);
+                  case WeightRecordUIModelType.monthly:
+                    notifier.watchMeanRecord(WeightRecordUIModelType.monthly);
+                }
+              },
+              items: _buildItems(context),
+            ),
           ),
-        ),
-        Expanded(
-          child: _RecordsScrollableList(
-            state.records,
-            notifier.loadMoreWeightRecords,
+          Expanded(
+            child: _RecordsScrollableList(
+              state.records,
+              notifier.loadMoreWeightRecords,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
