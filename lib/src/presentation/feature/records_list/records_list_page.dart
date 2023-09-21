@@ -5,10 +5,10 @@ import 'package:simple_weight_tracker/src/presentation/common/model/weight_recor
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_scroll_list_notfier.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
-// TODO(kura): implement pull to refresh
 class RecordsListPage extends ConsumerWidget {
   const RecordsListPage({super.key});
 
@@ -25,12 +25,16 @@ class RecordsListPage extends ConsumerWidget {
           Align(
             alignment: Alignment.topRight,
             child: ItemSelector<WeightRecordUIModelType>(
+              initialItem: SelectorItem(
+                value: WeightRecordUIModelType.weekly,
+                name: WeightRecordUIModelType.weekly.localizedName(context),
+              ),
               onSelected: (item) {
                 switch (item.value) {
                   case WeightRecordUIModelType.daily:
                     notifier.watchDailyWeightRecords(
                       pageNumber: 0,
-                      pageSize: 40,
+                      pageSize: AppConsts.recordsListPageSize,
                     );
                   case WeightRecordUIModelType.weekly:
                     notifier.watchMeanRecord(WeightRecordUIModelType.weekly);
