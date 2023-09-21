@@ -26,5 +26,5 @@ class AppConsts {
       Duration(milliseconds: 300);
 
   // Records List
-  static const int recordsListPageSize = 20;
+  static const int recordsListPageSize = 40;
 }

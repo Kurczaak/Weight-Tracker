@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
-import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
@@ -25,14 +24,6 @@ class HomePage extends ConsumerWidget {
     );
     final notifier = ref.watch(
       weightTrackerNotifierProvider(null).notifier,
-    );
-
-    final generateRandomRecords = ref.watch(
-      generateRandomRecordsUseCaseProvider,
-    );
-
-    final deleteAllRecords = ref.watch(
-      deleteAllRecordsUseCaseProvider,
     );
 
     return Scaffold(
@@ -99,9 +90,10 @@ class _HomePageBody extends StatelessWidget {
             onGoalWeightSelected: onGoalWeightSelected,
           ),
           AppSpacers.h24,
-          const _WeightChart(),
+          _WeightChart(goalWeight: goalWeight),
           AppSpacers.h24,
-          const _ProgressStatus(),
+          // const _ProgressStatus(),
+          AppSpacers.h48,
         ],
       ),
     );
@@ -236,7 +228,11 @@ class _WeightStatusCell extends StatelessWidget {
 }
 
 class _WeightChart extends ConsumerWidget {
-  const _WeightChart();
+  const _WeightChart({
+    required this.goalWeight,
+  });
+
+  final double? goalWeight;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -265,6 +261,7 @@ class _WeightChart extends ConsumerWidget {
             Expanded(
               child: WeightChart(
                 weightRecords: state,
+                goalWeight: goalWeight,
               ),
             ),
           ],
