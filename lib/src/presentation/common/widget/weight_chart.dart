@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
+import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
@@ -21,6 +22,8 @@ class WeightChart extends StatelessWidget {
   final double? goalWeight;
   final double? meanWeight;
 
+  static const _dashArray = [5, 10];
+
   @override
   Widget build(BuildContext context) {
     return LineChart(
@@ -29,13 +32,29 @@ class WeightChart extends StatelessWidget {
         minY: minWeight,
         minX: 0,
         maxX: weightRecords.length - 1.0,
-        gridData: const FlGridData(drawVerticalLine: false),
+        gridData: _buildGoalIndicatorLine(),
         borderData: FlBorderData(show: false),
         titlesData: _buildTitlesData(context),
         lineBarsData: [
           _buildWeightRecordsBarData(),
         ],
       ),
+    );
+  }
+
+  FlGridData _buildGoalIndicatorLine() {
+    return FlGridData(
+      drawVerticalLine: false,
+      getDrawingHorizontalLine: (value) => value == goalWeight
+          ? const FlLine(
+              color: AppColors.primaryColor,
+              dashArray: _dashArray,
+            )
+          : const FlLine(
+              color: AppColors.secondaryColor,
+              strokeWidth: 1,
+              dashArray: _dashArray,
+            ),
     );
   }
 
