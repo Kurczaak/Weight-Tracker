@@ -36,7 +36,11 @@ class LocalDaoImpl implements LocalDao {
 
   @override
   Future<void> deleteAllWeights() => isar.writeTxn(
-        () => isar.weightRecordEntitys.clear(),
+        () async {
+          await isar.weightRecordEntitys.clear();
+          await isar.monthlyMeanWeightEntitys.clear();
+          await isar.weeklyMeanWeightEntitys.clear();
+        },
       );
 
   @override
@@ -77,7 +81,11 @@ class LocalDaoImpl implements LocalDao {
 
   @override
   Future<void> updateWeight(WeightRecordEntity weight) =>
-      isar.writeTxn(() => isar.weightRecordEntitys.put(weight));
+      isar.writeTxn(() async {
+        await isar.weightRecordEntitys.put(weight);
+        await _handleUpdateWeeklyMeanWeight(weight);
+        await _handleUpdateMonthlyMeanWeight(weight);
+      });
 
   @override
   Future<WeightRecordEntity?> getFirstWeightRecord() =>
@@ -171,8 +179,9 @@ class LocalDaoImpl implements LocalDao {
     WeeklyMeanWeightEntity weeklyMeanWeight,
     WeightRecordEntity weight,
   ) {
-    final record = weeklyMeanWeight.weightRecords
-        .firstWhereOrNull((element) => element.id == weight.id);
+    final record = weeklyMeanWeight.weightRecords.firstWhereOrNull(
+      (element) => _areDatesTheSame(element.dateTime, weight.date),
+    );
     final weighRecords = [...weeklyMeanWeight.weightRecords];
     if (record != null) {
       weighRecords.remove(record);
@@ -205,8 +214,9 @@ class LocalDaoImpl implements LocalDao {
     MonthlyMeanWeightEntity monthlyMeanWeight,
     WeightRecordEntity weight,
   ) {
-    final record = monthlyMeanWeight.weightRecords
-        .firstWhereOrNull((element) => element.id == weight.id);
+    final record = monthlyMeanWeight.weightRecords.firstWhereOrNull(
+      (element) => _areDatesTheSame(element.dateTime, weight.date),
+    );
     final weighRecords = [...monthlyMeanWeight.weightRecords];
     if (record != null) {
       weighRecords.remove(record);
@@ -224,8 +234,9 @@ class LocalDaoImpl implements LocalDao {
         .get(_getWeeklyMeanWeightId(weight.date));
     if (weeklyMeanWeight == null) return;
 
-    final record = weeklyMeanWeight.weightRecords
-        .firstWhereOrNull((element) => element.id == weight.id);
+    final record = weeklyMeanWeight.weightRecords.firstWhereOrNull(
+      (element) => _areDatesTheSame(element.dateTime, weight.date),
+    );
     if (record != null) {
       weeklyMeanWeight.weightRecords.remove(record);
     }
@@ -244,8 +255,9 @@ class LocalDaoImpl implements LocalDao {
 
     if (monthlyMeanWeight == null) return;
 
-    final record = monthlyMeanWeight.weightRecords
-        .firstWhereOrNull((element) => element.id == weight.id);
+    final record = monthlyMeanWeight.weightRecords.firstWhereOrNull(
+      (element) => _areDatesTheSame(element.dateTime, weight.date),
+    );
     if (record != null) {
       monthlyMeanWeight.weightRecords.remove(record);
     }
@@ -253,6 +265,11 @@ class LocalDaoImpl implements LocalDao {
       await isar.monthlyMeanWeightEntitys.delete(monthlyMeanWeight.id!);
     }
   }
+
+  bool _areDatesTheSame(DateTime? first, DateTime? second) =>
+      first?.year == second?.year &&
+      first?.month == second?.month &&
+      first?.day == second?.day;
 
   int _getWeeklyMeanWeightId(DateTime date) =>
       date.year * 100 + date.weekNumber;
