@@ -4,7 +4,7 @@ import 'package:simple_weight_tracker/src/domain/model/weight/mean_weight.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';
 import 'package:simple_weight_tracker/src/presentation/common/model/weight_record_ui_model.dart';
-import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_scroll_list_state.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_list/weights_scroll_list_state.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/utils/debouncer.dart';
 import 'package:simple_weight_tracker/src/utils/weight_record_extensions.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/presentation/common/model/weight_record_ui_model.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
-import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_scroll_list_notfier.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_list/weights_scroll_list_notfier.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
