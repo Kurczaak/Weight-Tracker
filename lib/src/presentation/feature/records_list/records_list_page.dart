@@ -172,11 +172,6 @@ class _WeeklyRecordDateSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Week $weekNumber',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        AppSpacers.w12,
         Text(fromDate.toFormattedString()),
         const Text(' - '),
         Text(toDate.toFormattedString()),
