@@ -12,8 +12,14 @@
     "general__goal": "Cel",
     "general__current": "Obecnie",
     "general__start": "Start",
+    "general__home": "Home",
+    "general__list": "Lista",
     "status__status": "Status",
     "status__good": "Super",
     "status__bad": "Źle",
-    "add_weight_dialog__header": "Dodaj wagę"
+    "add_weight_dialog__header": "Dodaj wagę",
+    "records_list__daily": "Daily",
+    "records_list__weekly": "Weekly",
+    "records_list__monthly": "Monthly",
+    "records_list__empty": "Brak wyników"
 }

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 part 'weight_tracker_state.freezed.dart';
 

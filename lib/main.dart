@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/data/data_source/local_dao_impl.dart';
 import 'package:simple_weight_tracker/src/data/providers/local_dao_provider.dart';
-import 'package:simple_weight_tracker/src/presentation/feature/home/home_page.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/main/main_page.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
 
 void main() async {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: AppThemes.darkTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: ThemeMode.dark,
-      home: const HomePage(),
+      home: const MainPage(),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

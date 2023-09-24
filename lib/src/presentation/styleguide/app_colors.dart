@@ -5,13 +5,14 @@ class AppColors {
   static const secondaryColor = Color(0xFF333333);
   static const accentColor = Color(0xFFF2F2F2);
   static const positiveColor = Color(0xFF6BC992);
-  static const neutralColor = Color(0xFFFFC107); // Amber color
+  static const neutralColor = Color(0xFFC0C0C0); // Amber color
   static const negativeColor =
-      Color(0xFFB71C1C); // Red color for negative content
+      Color(0xFFFF0000); // Red color for negative content
   static const linearGradientStart = Color(0xFF9D50BB);
   static const linearGradientEnd = Color(0xFF6E48AA);
   static const backgroundGradient =
       LinearGradient(colors: [linearGradientStart, linearGradientEnd]);
+  static const transparent = Colors.transparent;
 }
 
 class AppThemes {

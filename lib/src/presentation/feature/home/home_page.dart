@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/l10n/l10n.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/base_card.dart';
+import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/notifier/period_selector_notifier.dart';
-import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/period_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/weight_chart.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/fitlered_weight_tracker/filtered_weight_tracker_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/home/notifier/weight_tracker/weight_tracker_notifier.dart';
@@ -25,7 +25,9 @@ class HomePage extends ConsumerWidget {
     final notifier = ref.watch(
       weightTrackerNotifierProvider(null).notifier,
     );
+
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: _HomePageBody(
         currentRecord: state.latestWeight,
         firstRecord: state.initialWeight,
@@ -73,32 +75,26 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: AppColors.backgroundGradient,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: AppDimens.paddingLarge,
+        horizontal: AppDimens.paddingLarge,
       ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppDimens.paddingLarge,
-            horizontal: AppDimens.paddingLarge,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _WeightStatusRow(
+            firstRecord: firstRecord,
+            currentRecord: currentRecord,
+            goalWeight: goalWeight,
+            onGoalWeightSelected: onGoalWeightSelected,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _WeightStatusRow(
-                firstRecord: firstRecord,
-                currentRecord: currentRecord,
-                goalWeight: goalWeight,
-                onGoalWeightSelected: onGoalWeightSelected,
-              ),
-              AppSpacers.h24,
-              const _WeightChart(),
-              AppSpacers.h24,
-              const _ProgressStatus(),
-            ],
-          ),
-        ),
+          AppSpacers.h24,
+          _WeightChart(goalWeight: goalWeight),
+          AppSpacers.h24,
+          // const _ProgressStatus(),
+          AppSpacers.h48,
+        ],
       ),
     );
   }
@@ -232,7 +228,11 @@ class _WeightStatusCell extends StatelessWidget {
 }
 
 class _WeightChart extends ConsumerWidget {
-  const _WeightChart();
+  const _WeightChart({
+    required this.goalWeight,
+  });
+
+  final double? goalWeight;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -241,30 +241,43 @@ class _WeightChart extends ConsumerWidget {
     final notifier = ref.watch(
       periodSelectorNotifierProvider.notifier,
     );
-    return BaseCard(
-      height: MediaQuery.of(context).size.height * .4,
-      width: double.maxFinite,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLarge,
-        vertical: AppDimens.paddingMedium,
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: PeriodSelector(
-              initiallySelectedPeriod: SelectedPeriod.month,
-              onSelected: notifier.selectPeriod,
+    return Expanded(
+      child: BaseCard(
+        width: double.maxFinite,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.paddingLarge,
+          vertical: AppDimens.paddingMedium,
+        ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: ItemSelector<SelectedPeriod>(
+                onSelected: (item) => notifier.selectPeriod(item.value),
+                items: _buildPeriodItems(context),
+              ),
             ),
-          ),
-          AppSpacers.h24,
-          Expanded(
-            child: WeightChart(
-              weightRecords: state,
+            AppSpacers.h24,
+            Expanded(
+              child: WeightChart(
+                weightRecords: state,
+                goalWeight: goalWeight,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  List<SelectorItem<SelectedPeriod>> _buildPeriodItems(BuildContext context) {
+    return SelectedPeriod.values
+        .map(
+          (e) => SelectorItem(
+            value: e,
+            name: e.localizedName(context),
+          ),
+        )
+        .toList();
   }
 }

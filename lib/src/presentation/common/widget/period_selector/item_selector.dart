@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:simple_weight_tracker/l10n/l10n.dart';
-import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/model/selected_period.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 
-class PeriodSelector extends HookWidget {
-  const PeriodSelector({
+class SelectorItem<T> {
+  const SelectorItem({
+    required this.value,
+    required this.name,
+  });
+
+  final T value;
+  final String name;
+}
+
+class ItemSelector<T> extends HookWidget {
+  const ItemSelector({
     required this.onSelected,
-    this.initiallySelectedPeriod,
+    required this.items,
+    this.initialItem,
     this.tooltip,
     super.key,
   });
 
-  final SelectedPeriod? initiallySelectedPeriod;
+  final SelectorItem<T>? initialItem;
+  final List<SelectorItem<T>> items;
   final String? tooltip;
-  final void Function(SelectedPeriod selectedPeriod) onSelected;
+  final void Function(SelectorItem<T> selectedPeriod) onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final selectedPeriod = useState(initiallySelectedPeriod);
+    assert(items.isNotEmpty, 'Items cannot be empty');
+
+    final selectedPeriod = useState(initialItem ?? items.first);
     final isOpened = useState(false);
 
-    void handleOnSelected(SelectedPeriod value) {
+    void handleOnSelected(SelectorItem<T> value) {
       selectedPeriod.value = value;
       onSelected(value);
       isOpened.value = false;
     }
 
-    return PopupMenuButton<SelectedPeriod>(
+    return PopupMenuButton<SelectorItem<T>>(
       elevation: 0,
       splashRadius: 0,
       position: PopupMenuPosition.under,
@@ -40,31 +52,31 @@ class PeriodSelector extends HookWidget {
       onSelected: handleOnSelected,
       onOpened: () => isOpened.value = true,
       onCanceled: () => isOpened.value = false,
-      child: _PeriodSelectorBody(
-        selectedPeriod: selectedPeriod,
+      child: _PeriodSelectorBody<T>(
+        selectedItem: selectedPeriod,
         isOpened: isOpened,
       ),
     );
   }
 
-  List<PopupMenuEntry<SelectedPeriod>> _buildItems(BuildContext context) =>
-      SelectedPeriod.values
+  List<PopupMenuEntry<SelectorItem<T>>> _buildItems(BuildContext context) =>
+      items
           .map(
-            (e) => PopupMenuItem<SelectedPeriod>(
+            (e) => PopupMenuItem<SelectorItem<T>>(
               value: e,
-              child: Text(e.localizedName(context)),
+              child: Text(e.name),
             ),
           )
           .toList();
 }
 
-class _PeriodSelectorBody extends StatelessWidget {
+class _PeriodSelectorBody<T> extends StatelessWidget {
   const _PeriodSelectorBody({
-    required this.selectedPeriod,
+    required this.selectedItem,
     required this.isOpened,
   });
 
-  final ValueNotifier<SelectedPeriod?> selectedPeriod;
+  final ValueNotifier<SelectorItem<T>> selectedItem;
   final ValueNotifier<bool> isOpened;
 
   @override
@@ -77,8 +89,9 @@ class _PeriodSelectorBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(selectedPeriod.value?.localizedName(context) ??
-              context.str.general__open),
+          Text(
+            selectedItem.value.name,
+          ),
           AppSpacers.w12,
           Icon(isOpened.value ? Icons.arrow_drop_up : Icons.arrow_drop_down),
         ],

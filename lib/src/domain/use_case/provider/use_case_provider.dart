@@ -1,7 +1,9 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:simple_weight_tracker/src/data/providers/config_repository_provider.dart';
 import 'package:simple_weight_tracker/src/data/providers/weight_repository_provider.dart';
+import 'package:simple_weight_tracker/src/domain/use_case/delete_all_records_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
+import 'package:simple_weight_tracker/src/domain/use_case/generate_random_records_use_case.dart';
 
 // CRUD operations
 
@@ -34,6 +36,11 @@ final getGoalWeightUseCaseProvider = Provider<GetGoalWeightUseCase>((ref) {
   return GetGoalWeightUseCase(repo);
 });
 
+final getMeanRecordsUseCaseProvider = Provider<GetMeanRecordsUseCase>((ref) {
+  final repo = ref.watch(weightRepositoryProvider);
+  return GetMeanRecordsUseCase(repo);
+});
+
 // UPDATE
 
 // DELETE
@@ -42,5 +49,19 @@ final deleteWeightRecordUseCaseProvider = Provider<DeleteWeightRecordUseCase>(
   (ref) {
     final repo = ref.watch(weightRepositoryProvider);
     return DeleteWeightRecordUseCase(repo);
+  },
+);
+
+// DEBUG
+final generateRandomRecordsUseCaseProvider =
+    Provider<GenerateRandomRecordsUseCase>((ref) {
+  final repo = ref.watch(weightRepositoryProvider);
+  return GenerateRandomRecordsUseCase(repo);
+});
+
+final deleteAllRecordsUseCaseProvider = Provider<DeleteAllRecordsUseCase>(
+  (ref) {
+    final repo = ref.watch(weightRepositoryProvider);
+    return DeleteAllRecordsUseCase(repo);
   },
 );

@@ -2,7 +2,8 @@ import 'package:simple_weight_tracker/src/data/data_source/local_dao.dart';
 import 'package:simple_weight_tracker/src/data/mappers/weight_record_mappers.dart';
 import 'package:simple_weight_tracker/src/data/repository/weight_repository.dart';
 import 'package:simple_weight_tracker/src/domain/model/data_paginator.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/mean_weight.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 
 class WeightRepositoryImpl implements WeightRepository {
   WeightRepositoryImpl(this._localDao);
@@ -10,13 +11,25 @@ class WeightRepositoryImpl implements WeightRepository {
   final LocalDao _localDao;
 
   @override
-  Future<WeightRecord> addWeight(WeightRecord weight) =>
-      _localDao.addWeight(weight.toEntity()).then((value) => value.toModel());
+  Future<WeightRecord> addWeight(WeightRecord weight) {
+    // Make sure only year, month and day are distinguished
+    final date = DateTime(
+      weight.date.year,
+      weight.date.month,
+      weight.date.day,
+    );
+    return _localDao
+        .addWeight(weight.copyWith(date: date).toEntity())
+        .then((value) => value.toModel());
+  }
 
   @override
   Future<void> deleteWeight(WeightRecord weight) => _localDao.deleteWeight(
         weight.toEntity(),
       );
+
+  @override
+  Future<void> deletAllWeights() => _localDao.deleteAllWeights();
 
   @override
   Future<List<WeightRecord>> getWeights({
@@ -67,4 +80,14 @@ class WeightRepositoryImpl implements WeightRepository {
           .map(
             (event) => event.toModelList(),
           );
+
+  @override
+  Stream<List<MeanWeight>> watchMontlyMeanWeights() => _localDao
+      .getMonthlyMeanWeights()
+      .map((event) => event?.toModelList() ?? []);
+
+  @override
+  Stream<List<MeanWeight>> watchWeeklyMeanWeights() => _localDao
+      .getWeeklyMeanWeights()
+      .map((event) => event?.toModelList() ?? []);
 }

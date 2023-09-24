@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
 import 'package:simple_weight_tracker/src/domain/model/date_boundaries.dart';
-import 'package:simple_weight_tracker/src/domain/model/weight_record.dart';
+import 'package:simple_weight_tracker/src/domain/model/weight/weight_record.dart';
 import 'package:simple_weight_tracker/src/domain/model/weight_record_data_paginator.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/export_use_case.dart';
 import 'package:simple_weight_tracker/src/domain/use_case/provider/use_case_provider.dart';

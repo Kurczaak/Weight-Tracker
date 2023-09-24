@@ -1,5 +1,6 @@
 export 'delete_weight_record_use_case.dart';
 export 'get_goal_weight_use_case.dart';
+export 'get_mean_records_use_case.dart';
 export 'get_weight_records_use_case.dart';
 export 'save_goal_weight_use_case.dart';
 export 'save_weight_record_use_case.dart';
