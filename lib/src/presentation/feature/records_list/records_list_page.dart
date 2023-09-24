@@ -3,9 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_weight_tracker/src/presentation/common/model/weight_record_ui_model.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
+import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/filtered_weights_list/weights_filter_notifier.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/weights_list/weights_scroll_list_notfier.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_colors.dart';
-import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dart';
 import 'package:simple_weight_tracker/src/presentation/styleguide/app_dimens.dart';
 import 'package:simple_weight_tracker/src/utils/date_time_extensions.dart';
 
@@ -14,8 +14,13 @@ class RecordsListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(weightsScrollListNotifierProvider);
-    final notifier = ref.watch(weightsScrollListNotifierProvider.notifier);
+    final filterProvider = ref.watch(weightsFilterNotifierProvider.notifier);
+    final filterState = ref.watch(weightsFilterNotifierProvider);
+    final weightsListProvider =
+        ref.watch(weightsScrollListNotifierProvider(filterState).notifier);
+
+    final state = ref.watch(weightsScrollListNotifierProvider(filterState));
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.paddingLarge,
@@ -30,17 +35,7 @@ class RecordsListPage extends ConsumerWidget {
                 name: WeightRecordUIModelType.weekly.localizedName(context),
               ),
               onSelected: (item) {
-                switch (item.value) {
-                  case WeightRecordUIModelType.daily:
-                    notifier.watchDailyWeightRecords(
-                      pageNumber: 0,
-                      pageSize: AppConsts.recordsListPageSize,
-                    );
-                  case WeightRecordUIModelType.weekly:
-                    notifier.watchMeanRecord(WeightRecordUIModelType.weekly);
-                  case WeightRecordUIModelType.monthly:
-                    notifier.watchMeanRecord(WeightRecordUIModelType.monthly);
-                }
+                filterProvider.selectFilter(item.value);
               },
               items: _buildItems(context),
             ),
@@ -48,7 +43,7 @@ class RecordsListPage extends ConsumerWidget {
           Expanded(
             child: _RecordsScrollableList(
               state.records,
-              notifier.loadMoreWeightRecords,
+              weightsListProvider.loadMoreWeightRecords,
             ),
           ),
         ],
@@ -71,7 +66,10 @@ class RecordsListPage extends ConsumerWidget {
 }
 
 class _RecordsScrollableList extends HookWidget {
-  const _RecordsScrollableList(this._records, this.onLoadMore);
+  const _RecordsScrollableList(
+    this._records,
+    this.onLoadMore,
+  );
 
   final List<WeightRecordUIModel> _records;
   final VoidCallback onLoadMore;

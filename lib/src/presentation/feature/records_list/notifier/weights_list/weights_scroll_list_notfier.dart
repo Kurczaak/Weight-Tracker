@@ -9,9 +9,10 @@ import 'package:simple_weight_tracker/src/presentation/styleguide/app_consts.dar
 import 'package:simple_weight_tracker/src/utils/debouncer.dart';
 import 'package:simple_weight_tracker/src/utils/weight_record_extensions.dart';
 
-final weightsScrollListNotifierProvider =
-    StateNotifierProvider<WeightsScrollListNotifier, WeightsScrollListState>(
-        (ref) {
+final weightsScrollListNotifierProvider = StateNotifierProvider.family<
+    WeightsScrollListNotifier,
+    WeightsScrollListState,
+    WeightRecordUIModelType>((ref, type) {
   final watchWeightRecordsUseCase =
       ref.watch(watchWeightRecordsUseCaseProvider);
   final getMeanRecordsUseCase = ref.watch(getMeanRecordsUseCaseProvider);
@@ -19,6 +20,7 @@ final weightsScrollListNotifierProvider =
   return WeightsScrollListNotifier(
     watchWeightRecordsUseCase,
     getMeanRecordsUseCase,
+    type,
   );
 });
 
@@ -26,17 +28,27 @@ class WeightsScrollListNotifier extends StateNotifier<WeightsScrollListState> {
   WeightsScrollListNotifier(
     this._watchWeightRecordsUseCase,
     this._getMeanRecordsUseCase,
+    this._type,
   ) : super(const WeightsScrollListState()) {
-    watchMeanRecord(WeightRecordUIModelType.weekly);
+    if (_type == WeightRecordUIModelType.daily) {
+      watchDailyWeightRecords(
+        pageNumber: pageNumber,
+        pageSize: AppConsts.recordsListPageSize,
+      );
+    } else {
+      watchMeanRecord(_type);
+    }
   }
 
   final WatchWeightRecordsUseCase _watchWeightRecordsUseCase;
   final GetMeanRecordsUseCase _getMeanRecordsUseCase;
-  final debouncer = Debouncer(200); // TODO
+  final WeightRecordUIModelType _type;
+  final debouncer = Debouncer(AppConsts.debouncerDuration.inMilliseconds);
   int pageNumber = 0;
 
   Future<void> loadMoreWeightRecords() async {
-    if (state.isLoading) return;
+    if (state.isLoading || !_type.isDaily) return;
+
     state = state.copyWith(isLoading: true);
     pageNumber++;
     debouncer.debounce(() async {

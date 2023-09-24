@@ -27,4 +27,5 @@ class AppConsts {
 
   // Records List
   static const int recordsListPageSize = 40;
+  static const Duration debouncerDuration = Duration(milliseconds: 200);
 }
