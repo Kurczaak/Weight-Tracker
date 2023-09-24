@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_weight_tracker/l10n/l10n.dart';
 import 'package:simple_weight_tracker/src/presentation/common/model/weight_record_ui_model.dart';
 import 'package:simple_weight_tracker/src/presentation/common/widget/period_selector/item_selector.dart';
 import 'package:simple_weight_tracker/src/presentation/feature/records_list/notifier/filtered_weights_list/weights_filter_notifier.dart';
@@ -89,7 +90,7 @@ class _RecordsScrollableList extends HookWidget {
       return null;
     });
     if (_records.isEmpty) {
-      return const Center(child: Text('No records')); // TODO
+      return Center(child: Text(context.str.records_list__empty));
     }
 
     return ListView.builder(
